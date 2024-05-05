@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ADD FONTS HERE */
+@font-face {
+  font-family: 'inno';
+  src: url(/public/fonts/inno.otf);
+}

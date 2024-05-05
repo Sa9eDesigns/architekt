@@ -1,0 +1,3 @@
+/*This Defunes the Component Settings Component
+The Component Settings Component is responsible for managing the settings of each component.
+*/
