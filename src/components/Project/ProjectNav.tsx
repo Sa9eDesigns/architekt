@@ -1,4 +1,9 @@
 'use client'
+/*ProjectNav
+- This component is a sidebar that displays the navigation items for the current Project.
+- It is used in the ProjectLayout component.
+- It uses the useRouter hook from next/navigation to navigate to different routes.
+*/
 
 import * as React from 'react';
 import GlobalStyles from '@mui/joy/GlobalStyles';
@@ -100,7 +105,7 @@ const NavigationItems = [
   },
 ];
 
-export default function Sidebar() {
+export default function ProjectNav() {
   //CONSTANTS
   const router = useRouter();
 
