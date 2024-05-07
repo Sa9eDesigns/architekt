@@ -1,7 +1,7 @@
 *Development Notes*
 ## Accounts and Authentication
 *Overview*
-Archiktect uses an Organization based account system. Here are the main components of the system:
+Architekt uses an Organization based account system. Here are the main components of the system:
 
 - **Organization**: An organization is an entity that can have multiple users and projects. An organization is the top level entity in the system. It is mandatory to have an organization to use the system. The organization is created and managed by the organization owner, who is the first user of the organization.
 
@@ -112,3 +112,49 @@ Heres a brief description of the tables:
 The **users** table has a foreign key to the **organizations** table, which means each user belongs to an organization. The **user_roles** table is a junction table that associates **users** with roles.
 
 The **sub_roles** table has a foreign key to the **organizations** table, which means each sub-role belongs to an organization. The user_sub_roles table is a junction table that associates **users** with sub-roles.
+
+### The "God" Username and "Developer" Role
+The system has a special user called the with the username "god" and the role "Developer". This user is known as **GOD**. ("Praise be to GOD"). 🙏🏾
+** THE COMMANDMENTS OF THE GOD USER **
+- The **GOD** user has full access to all Entities in the system. 
+- The **GOD** user can create, update, delete, and view all entities in the system.
+- The **GOD** user is the first user of the system and is created when the system is initialized. Furthermore, a system can have only one **GOD** user.
+- The **GOD** user boasts a special role called "Developer" is not Granted to any other user in the system.
+- **GOD's** Identity is known by the username "god" and the role "Developer". 
+- **GOD's** is Defined and Protected by Database Constraints and cannot be changed or deleted.
+- **GOD's** existance is persistent and eternal. if God is deleted, a database trigger will recreate the **GOD**
+- To Summarize, All of "Architekt" is under the control of **GOD**. 
+- **GOD's** account details are stored in the `.env` 
+
+*God Query*
+```sql
+-- Add a column `is_god` to the User table:
+   ALTER TABLE "user" ADD COLUMN is_god BOOLEAN DEFAULT FALSE;
+   
+
+-- Update the Role table to include the "Developer" role:
+   INSERT INTO Role (role_id, name) VALUES (default, 'Developer');
+   
+
+-- Ensure constraints to enforce uniqueness of **GOD** user and immutability:
+   ALTER TABLE "user" ADD CONSTRAINT check_single_god_user CHECK (is_god);
+   
+
+-- Implement a database trigger to recreate **GOD** user if deleted:
+   CREATE OR REPLACE FUNCTION recreate_god_user()
+   RETURNS TRIGGER AS
+   $$
+   BEGIN
+       -- Code to recreate GOD user
+       RETURN NEW;
+   END;
+   $$
+   LANGUAGE plpgsql;
+
+   CREATE TRIGGER recreate_god_trigger
+   AFTER DELETE ON "user"
+   FOR EACH ROW
+   WHEN (OLD.is_god)
+   EXECUTE FUNCTION recreate_god_user();
+
+```
