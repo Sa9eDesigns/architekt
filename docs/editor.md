@@ -8,6 +8,4 @@ this includes setting up the state, the components, the template, and the interp
 
 What we need is a way to dynamically generate the state, components, template, and interpreter based on some configuration. This is where a **Project** comes in. Part of a project's definition is a configuration that describes the editor's structure. This configuration is then used to generate the necessary boilerplate code to set up the editor.
 
-### Project Configuration
-The most important step when setting up is project is selecting a template. In our case, we have 1 template which is NextJs Template. This template is a complete NextJs project that includes all the necessary dependencies and configurations to get started with a NextJs project. all the user has to do is to run `npm install` and `npm run dev` to start the project.
 
