@@ -3,7 +3,7 @@ import Button from '@mui/joy/Button';
 import Typography from '@mui/joy/Typography';
 import Card from '@mui/joy/Card';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import TwoSidedLayout from '../components/TwoSidedLayout';
+import TwoSidedLayout from '../Components/TwoSidedLayout';
 
 export default function HeroLeft07() {
   return (
@@ -27,7 +27,7 @@ export default function HeroLeft07() {
       >
         <AutoAwesomeIcon color="success" fontSize="xl3" />
         <div>
-          <Typography fontSize="xl" fontWeight="lg" sx={{ mb: 1 }}>
+          <Typography fontSize="large"fontWeight="lg" sx={{ mb: 1 }}>
             The new version is out.
           </Typography>
           <Typography level="body-sm">

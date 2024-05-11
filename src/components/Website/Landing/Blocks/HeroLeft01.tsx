@@ -4,7 +4,7 @@ import Button from '@mui/joy/Button';
 import Link from '@mui/joy/Link';
 import Typography from '@mui/joy/Typography';
 import ArrowForward from '@mui/icons-material/ArrowForward';
-import TwoSidedLayout from '../components/TwoSidedLayout';
+import TwoSidedLayout from '../Components/TwoSidedLayout';
 
 export default function HeroLeft01() {
   return (
@@ -23,7 +23,7 @@ export default function HeroLeft01() {
         A descriptive secondary text placeholder. Use it to explain your business
         offer better.
       </Typography>
-      <Button size="lg" endDecorator={<ArrowForward fontSize="xl" />}>
+      <Button size="lg" endDecorator={<ArrowForward fontSize="large"/>}>
         Get Started
       </Button>
       <Typography>

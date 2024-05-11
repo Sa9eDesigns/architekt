@@ -3,7 +3,7 @@ import Avatar from '@mui/joy/Avatar';
 import Button from '@mui/joy/Button';
 import Typography from '@mui/joy/Typography';
 import Star from '@mui/icons-material/Star';
-import TwoSidedLayout from '../components/TwoSidedLayout';
+import TwoSidedLayout from '../Components/TwoSidedLayout';
 
 export default function HeroLeft06() {
   return (

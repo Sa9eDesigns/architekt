@@ -5,7 +5,7 @@ import Chip from '@mui/joy/Chip';
 import Typography from '@mui/joy/Typography';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import TwoSidedLayout from '../components/TwoSidedLayout';
+import TwoSidedLayout from '../Components/TwoSidedLayout';
 
 export default function HeroLeft04() {
   return (
@@ -33,7 +33,7 @@ export default function HeroLeft04() {
           '& > *': { flex: 'auto' },
         }}
       >
-        <Button size="lg" endDecorator={<ArrowForward fontSize="xl" />}>
+        <Button size="lg" endDecorator={<ArrowForward fontSize="large"/>}>
           Get Started
         </Button>
         <Button

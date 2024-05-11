@@ -4,7 +4,7 @@ import Button from '@mui/joy/Button';
 import Link from '@mui/joy/Link';
 import Typography from '@mui/joy/Typography';
 import ArrowForward from '@mui/icons-material/ArrowForward';
-import TwoSidedLayout from '../components/TwoSidedLayout';
+import TwoSidedLayout from '../Components/TwoSidedLayout';
 
 export default function HeroLeft09() {
   return (
@@ -22,7 +22,7 @@ export default function HeroLeft09() {
       </Typography>
       <Button
         size="lg"
-        endDecorator={<ArrowForward fontSize="xl" />}
+        endDecorator={<ArrowForward fontSize="large"/>}
         sx={{ mt: 2, mb: 1 }}
       >
         Get Started

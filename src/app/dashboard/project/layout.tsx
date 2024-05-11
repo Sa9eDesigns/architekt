@@ -22,7 +22,6 @@ export default function ProjectLayout({
 }) {
   //LOCAL STORAGE
   const currentTheme = localStorage.getItem("darkMode");
-
   //STATES
   const { toggleTheme, toggleSidebar, theme, sidebarOpen } = useGlobalStore(
     (state) => state

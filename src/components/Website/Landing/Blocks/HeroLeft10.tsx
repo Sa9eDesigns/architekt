@@ -5,7 +5,7 @@ import Input from '@mui/joy/Input';
 import IconButton from '@mui/joy/IconButton';
 import Typography from '@mui/joy/Typography';
 import ArrowForward from '@mui/icons-material/ArrowForward';
-import TwoSidedLayout from '../components/TwoSidedLayout';
+import TwoSidedLayout from '../Components/TwoSidedLayout';
 
 export default function HeroLeft04() {
   return (

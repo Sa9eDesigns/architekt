@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from 'react';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import Box from '@mui/joy/Box';
@@ -55,7 +57,7 @@ function ColorSchemeToggle() {
   );
 }
 
-export default function TeamExample() {
+export default function LandingPage() {
   return (
     <Box
         sx={{

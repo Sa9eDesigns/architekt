@@ -5,7 +5,7 @@ import Input from '@mui/joy/Input';
 import Typography from '@mui/joy/Typography';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 import Star from '@mui/icons-material/Star';
-import TwoSidedLayout from '../components/TwoSidedLayout';
+import TwoSidedLayout from '../Components/TwoSidedLayout';
 
 export default function HeroLeft02() {
   return (
@@ -34,7 +34,7 @@ export default function HeroLeft02() {
         }}
       >
         <Input size="lg" placeholder="Sign in with email" />
-        <Button size="lg" endDecorator={<ArrowForward fontSize="xl" />}>
+        <Button size="lg" endDecorator={<ArrowForward fontSize="large"/>}>
           Get Started
         </Button>
       </Box>
@@ -68,7 +68,7 @@ export default function HeroLeft02() {
           <Typography
             fontSize="xl4"
             fontWeight="lg"
-            endDecorator={<Star fontSize="xl4" sx={{ color: 'warning.300' }} />}
+            endDecorator={<Star fontSize="large" sx={{ color: 'warning.300' }} />}
           >
             4.9
           </Typography>
