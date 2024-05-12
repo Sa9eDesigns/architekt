@@ -27,7 +27,7 @@ export default function HeroLeft01() {
         Get Started
       </Button>
       <Typography>
-        Already a member? <Link fontWeight="lg">Sign in</Link>
+        Already a member? <Link fontWeight="lg" href='auth/sign-in'>Sign in</Link>
       </Typography>
       <Typography
         level="body-xs"

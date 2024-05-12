@@ -6,22 +6,18 @@ import FormLabel from '@mui/joy/FormLabel';
 import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
 import Link from '@mui/joy/Link';
-import Header from '@/components/Dashboard/Header';
 
-export default function Dashboard() {
+export default function Home() {
   return (
     <Sheet
       sx={{
-        //display: 'flex',
-        //flexFlow: 'row nowrap',
-        //justifyContent: 'center',
-        //alignItems: 'center',
+        display: 'flex',
+        flexFlow: 'row nowrap',
+        justifyContent: 'center',
+        alignItems: 'center',
         minHeight: '100vh',
-        flexDirection: 'column',
       }}
     >
-      <Header />
-
       <Sheet
         sx={{
           width: 300,
@@ -39,26 +35,25 @@ export default function Dashboard() {
       >
         <div>
           <Typography level="h4" component="h1">
-            <strong>Welcome 👋</strong>
+            <strong>Welcome back 👋</strong>
           </Typography>
-          <Typography level="body-sm">Sign up for an account.</Typography>
+          <Typography level="body-sm">Sign in to continue.</Typography>
         </div>
-        <FormControl>
+        <FormControl id="email">
           <FormLabel>Email</FormLabel>
           <Input name="email" type="email" placeholder="johndoe@email.com" />
         </FormControl>
-        <FormControl>
+        <FormControl id="password">
           <FormLabel>Password</FormLabel>
           <Input name="password" type="password" placeholder="password" />
         </FormControl>
-
-        <Button sx={{ mt: 1 }}>Create account</Button>
+        <Button sx={{ mt: 1 }}>Log in</Button>
         <Typography
-          endDecorator={<Link href="/">Log in</Link>}
+          endDecorator={<Link href="/sign-up">Sign up</Link>}
           fontSize="sm"
           sx={{ alignSelf: 'center' }}
         >
-          Already have an account?
+          Don&apos;t have an account?
         </Typography>
       </Sheet>
     </Sheet>

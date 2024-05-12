@@ -7,9 +7,8 @@
 
 import React from "react";
 import { Box, Grid } from "@mui/joy";
-import { LeftSidebar } from "./Components/LeftSidebar";
-import { LayoutEditor } from "./Components/LayoutEditor";
-import { RightSidebar } from "./Components/RightSidebar";
+import LeftSidebar from "@/components/Modules/Editors/AchiTypeEditor/Components/LeftSidebar";
+import LayoutEditor from "@/components/Modules/Editors/AchiTypeEditor/LayoutEditor";
 
 export default function LayoutEditorPage() {
   
@@ -32,7 +31,6 @@ export default function LayoutEditorPage() {
           <LayoutEditor />
         </Grid>
         <Grid xs={3}>
-          <RightSidebar />
         </Grid>
       </Grid>
     </Box>

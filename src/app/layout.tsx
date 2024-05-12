@@ -49,11 +49,9 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     <html lang="en">
       <body className={`${circular.variable} ${f_inno.variable}`}>
         <ThemeRegistry>
-          <JotaiProvider>
           <GlobalStoreProvider>
           {props.children}
           </GlobalStoreProvider>
-          </JotaiProvider>
           </ThemeRegistry>
       </body>
     </html>

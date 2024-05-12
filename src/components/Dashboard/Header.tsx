@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from 'react';
 import { useColorScheme } from '@mui/joy/styles';
 import Box from '@mui/joy/Box';
@@ -59,6 +61,13 @@ export default function Header() {
         display: 'flex',
         flexGrow: 1,
         justifyContent: 'space-between',
+        px: 2,
+        py: 1,
+        gap: 1.5,
+        bgcolor: 'background.level0',
+        boxShadow: 'sm',
+        zIndex: '9999',
+        
       }}
     >
       <Stack

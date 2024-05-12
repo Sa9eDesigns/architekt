@@ -20,6 +20,7 @@ import {
   // Import predefined theme
   ThemeSupa,
 } from '@supabase/auth-ui-shared'
+import SignInForm from "@/components/Auth/SignInForm";
 
 //CONSTANTS
 const supabase = createClient(`${process.env.NEXT_PUBLIC_SUPABASE_URL}`, `${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`);
@@ -111,21 +112,7 @@ export default function SignIn() {
           </Box>
 
           {/* Auth component */}
-          <Card 
-            variant="outlined"
-            sx={{ p: 2, mb: 2 }}
-          >
-            <Auth 
-            supabaseClient={supabase}
-            appearance={{ theme: ThemeSupa }}
-            providers={['github']}
-            view="sign_in"
-            dark
-            magicLink
-            redirectTo="/dashboard"
-            showLinks={false}
-          />
-          </Card>
+          <SignInForm/>
           
 
           {/* Footer */}

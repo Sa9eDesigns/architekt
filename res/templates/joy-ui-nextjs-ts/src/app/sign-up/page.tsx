@@ -6,22 +6,18 @@ import FormLabel from '@mui/joy/FormLabel';
 import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
 import Link from '@mui/joy/Link';
-import Header from '@/components/Dashboard/Header';
 
-export default function Dashboard() {
+export default function SignUp() {
   return (
     <Sheet
       sx={{
-        //display: 'flex',
-        //flexFlow: 'row nowrap',
-        //justifyContent: 'center',
-        //alignItems: 'center',
+        display: 'flex',
+        flexFlow: 'row nowrap',
+        justifyContent: 'center',
+        alignItems: 'center',
         minHeight: '100vh',
-        flexDirection: 'column',
       }}
     >
-      <Header />
-
       <Sheet
         sx={{
           width: 300,
