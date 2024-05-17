@@ -5,46 +5,83 @@ import { ResizeHandleAxis } from "@/components/Modules/Editors/AchiTypeEditor/Co
 import { UUID } from "crypto";
 
 /*===========================
+USERS AND AUTHENTICATION TYPES
+===========================*/
+export interface User {
+  id: number;
+  auth_uid: UUID;
+  email: string;
+  email_verified: boolean;
+  phone_number: string;
+  phone_number_verified: boolean;
+  username: string;
+  password_hash: string;
+  created_at: string;
+  updated_at: string;
+  last_login: string;
+}
+
+export interface Organization {
+  id: UUID
+  name: string;
+  description: string;
+  owner: User;
+  members: User[];
+  created_at: string;
+}
+
+export interface AuthToken {
+  token: string;
+  user: User;
+  organization: Organization;
+  expires_at: string;
+}
+
+export interface AuthState {
+  user: User | null;
+  token: AuthToken | null;
+  organization: Organization | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface AuthContextType {
+  state: AuthState;
+  login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+}
+
+
+/*===========================
 Project Types And Interfaces
 ===========================*/
 export interface Project {
-  Id: UUID
-  Name: string;
-  Description: string;
-  Organization: string;
-  StartDate: string;
-  EndDate: string;
-  Status: string;
-  Template: ITemplate;
-  Application: Application;
-}
-
-export interface ProjectForm {
-  Name: string;
-  Description: string;
-  Template: ITemplate;
-  CreatedAt: string;
+  id: UUID | null;
+  name: string;
+  description: string;
+  organization: Organization;
+  startdate: string;
+  enddate: string;
+  status: string;
+  template: ITemplate;
+  application: Application;
 }
 
 export interface ITemplate {
-  Id: UUID;
-  Name: string;
-  Description: string;
-  UI: "MUI" | "BaseUI";
+  id: string,
+  name: string;
+  description: string;
+  ui: "MUI" | "BaseUI";
+  templateUrl: "string";
 }
 
-export interface ProjectItem {
-  Id: UUID;
-  Name: string;
-  Description: string;
-  Template?: ITemplate;
-}
 
 /*======================================================
 Application Types And Interfaces
 -- refers to the Application currently being developed
 ======================================================*/
-
 export interface Application {
   id: string;
   name: string;
@@ -57,19 +94,27 @@ export interface Application {
   settings: ApplicationSettings;
 }
 
-
-
 //--COMPONENTS
+//--a component is a reusable UI element that can be added to a page
+//--it is Composed of a React-Grid-Layout where each GridItem is a PrimitiveElement
+//--a component can have multiple actions that are triggered by events
+//--a component can also have parameters that can be customized aand passed to its children(PrimitiveElements)
+
 export interface Component {
   Id: UUID
   Name: string;
   Type: string;
   Layout: ComponentLayoutEditMode | ComponentLayoutPreviewMode;
   Actions: ComponentAction[];
-  Parameters: ComponentParameter;
+  Parameters: ComponentParameter[];
 }
 
 //--component -> layout(edit_mode)
+//--layout configuration for the component in edit mode
+//--allows for dragging, resizing, and customization of the component
+//--layout is a grid layout with PrimitiveElements as items
+//--layout can have event callbacks for drag, resize, and drop events
+//--layout can have properties for styling and configuration
 export interface ComponentLayoutEditMode {
   Width: number;
   AutoSize: boolean; // Adjusted to boolean type
@@ -114,6 +159,10 @@ export interface ComponentLayoutEditMode {
 }
 
 //--component -> layout(preview_mode)
+//--layout configuration for the component in preview mode
+//--layout is a grid layout with PrimitiveElements as items
+//--layout is static and does not allow for dragging or resizing
+//--layout can have properties for styling and configuration
 export interface ComponentLayoutPreviewMode {
   Width: number;
   AutoSize: boolean; // Adjusted to boolean type
@@ -134,6 +183,11 @@ export interface ComponentLayoutPreviewMode {
   InnerRef: { current: null | HTMLDivElement };
 }
 
+//--primitive element
+//--a primitive element is a basic building block of a component
+//--it represents a UI element that can be rendered on the screen
+//--a primitive element is a grid item within a layout and therefore has React-Grid-Layout GridItem properties
+//--a primitive element callbacks and Captured by its parent component(in this case, a component)
 export interface PrimitiveElement {
   id: string; // Unique identifier for the element
   name?: string; // Name of the element (optional)
@@ -172,36 +226,98 @@ export interface PrimitiveElement {
   onDrop?: (item: PrimitiveElement, e: MouseEvent) => void;
 }
 
-export interface P_element {
+//--component -> primitive element -> (rendered) element
+//--a rendered element is the actual UI element that is rendered on the screen
+//--it can be a native HTML element or a custom component
+//--a rendered element can have properties or attributes associated with it
+//--rendered elements dont have any Child elements, they are the lowest level of the component hierarchy
+//--a rendered element can have a value associated with it (e.g., component params, state, etc.)
+//--rendered elements can have additional properties, styles, and class names
+export interface RenderedElement {
   render: JSX.Element | null; // React element to be rendered
   props: Record<string, any> | null; // Properties or attributes associated with the element
-  children?: P_element[] | null; // Children elements of the current element (optional)
   value?: any | null; // Value associated with the element (optional)
   type: string; // Type of the element
   id?: string; // Identifier for the element (optional)
   name?: string; // Name of the element (optional)
   description?: string; // Description of the element (optional)
   jsx?: string; // JSX code representing the element (optional)
+  properties?: Record<string, any>;
+  style?: Record<string, any>;
+  className?: string;
 }
 
+//--Primitive Element Draggable Toolbox Item
+//--a draggable toolbox item is a UI element that can be dragged and dropped onto a layout
+//--it represents a component or element that can be added to a page or layout
+//--a draggable toolbox item has properties such as the element to be rendered and its configuration
+//--it use the 'useDraggable' hook from the DndKit library to enable drag-and-drop functionality
+export interface DraggableToolboxItem {
+  id: string; // Unique identifier for the toolbox item
+  name: string; // Name of the toolbox item
+  element: JSX.Element; // React element to be rendered
+  config: {
+    // Configuration for the toolbox item
+    type: string; // Type of the element
+    properties?: Record<string, any>; // Properties or attributes associated with the element (optional)
+    style?: Record<string, any>; // Styles for the element (optional)
+    className?: string; // Custom CSS class for the element (optional)
+  };
+  onDrop?: (event: DragEndEvent) => void; // Callback function for when the item is dropped
+}
+
+//--Primitive Element Draggable Toolbox
+//--a draggable toolbox is a collection of draggable toolbox items
+//--it represents a set of components or elements that can be dragged and dropped onto a layout
+//--a draggable toolbox can have multiple categories or sections for organizing the toolbox items
+export interface DraggableToolbox {
+  id: string; // Unique identifier for the toolbox
+  name: string; // Name of the toolbox
+  categories: {
+    id: string; // Unique identifier for the category
+    name: string; // Name of the category
+    items: DraggableToolboxItem[]; // Toolbox items within the category
+  }[];
+}
+
+
 //COMPONENT PARAMETERS
+//--component parms are properties that can be customized and passed to a component
+//--parameters are defined at the component level and can be used to configure the component
+//--parameters can be of different types such as string, number, boolean, etc.
+//--the values of a parameter can be shared with the child elements of the component
 export interface ComponentParameter {
   id: string; // Unique identifier for the parameter
   name: string; // Name of the parameter
-  type: string; // Type of the parameter (e.g., string, number, boolean, etc.)
-  value: any; // Value of the parameter
-  options?: any[]; // List of options for the parameter (optional)
+  type: ParameterType; // Type of the parameter (e.g., string, number, boolean)
+  defaultValue?: any; // Default value for the parameter (optional)
   required: boolean; // Indicates if the parameter is required
+  options?: any[]; // List of options for the parameter (optional)
 }
 
 //ACTIONS
+//--actions are events that can be triggered by a component
+//--actions can be associated with specific events such as click, hover, as well as lifecycle events like onInit, onBeforeDestroy
+//--actions can perform various tasks such as navigation, state updates, API calls, etc.
+//--actions have the option to be parameterized, allowing for dynamic behavior 
+//--actions can have conditions that determine when they are executed
 export interface ComponentAction {
   id: string; // Unique identifier for the action
   name: string; // Name of the action
-  description?: string; // Description of the action (optional)
-  event: ComponentEvent; // Event associated with the action
-  actionType: ActionType; // Type of action (e.g., navigate, setState)
-  parameters?: ActionParameter[]; // Parameters associated with the action (optional)
+  type?: Action | null; // Type of the action (e.g., navigate, setState, callAPI, etc.)
+  parameters?: ActionParameter[]; // Parameters for the action (optional)
+  conditions?: EventCondition[]; // Conditions for executing the action (optional)
+}
+
+//--action types
+//component -> action -> type
+//An array of functions with callback functions that can be executed
+export interface Action{
+  type: string;
+  function: Function;
+  params: Array<any>;
+  action_options: Array<any>;
+  callback: Function;
 }
 
 // Enum for component events
@@ -213,11 +329,7 @@ export enum ComponentEvent {
 }
 
 // Enum for action types
-export enum ActionType {
-  Navigate = "navigate",
-  SetState = "setState",
-  // Add more action types as needed
-}
+
 
 // Interface for action parameters
 export interface ActionParameter {
@@ -346,7 +458,6 @@ export interface ApplicationDatabase {
 
 
 //DATA MODELS
-// Define interface for a data model property
 // Define interface for a data model property constraint
 export interface DataModelPropertyConstraint {
   name: string; // Name of the constraint

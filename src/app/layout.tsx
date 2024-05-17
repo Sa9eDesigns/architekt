@@ -7,6 +7,7 @@ import {
 //Global Jotai Store
 import { JotaiProvider } from '@/components/Stores';
 import local from 'next/font/local';
+import { AIStoreProvider } from '@/stores/useAIStoreProvider';
 
 //Metadata
 export const metadata = {
@@ -50,9 +51,9 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body className={`${circular.variable} ${f_inno.variable}`}>
         <ThemeRegistry>
           <GlobalStoreProvider>
-          {props.children}
+            <AIStoreProvider>{props.children}</AIStoreProvider>
           </GlobalStoreProvider>
-          </ThemeRegistry>
+        </ThemeRegistry>
       </body>
     </html>
   );

@@ -7,8 +7,21 @@ import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
 import Link from '@mui/joy/Link';
 import Header from '@/components/Dashboard/Header';
+import { Grid, Stack } from '@mui/material';
+import ProjectGridItem from '@/components/Project/ProjectItem';
 
 export default function Dashboard() {
+
+  //CONSTANTS
+  
+  //STATES
+  
+
+  //FUNCTIONS
+  
+  //HOOKS
+
+  //RENDER
   return (
     <Sheet
       sx={{
@@ -22,45 +35,45 @@ export default function Dashboard() {
     >
       <Header />
 
-      <Sheet
+      {/* Header and Button */}
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
         sx={{
-          width: 300,
-          mx: 'auto',
-          my: 4,
-          py: 3,
-          px: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 2,
-          borderRadius: 'sm',
-          boxShadow: 'md',
+          width: '100%',
+          padding: '1rem',
         }}
-        variant="outlined"
       >
-        <div>
-          <Typography level="h4" component="h1">
-            <strong>Welcome 👋</strong>
-          </Typography>
-          <Typography level="body-sm">Sign up for an account.</Typography>
-        </div>
-        <FormControl>
-          <FormLabel>Email</FormLabel>
-          <Input name="email" type="email" placeholder="johndoe@email.com" />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Password</FormLabel>
-          <Input name="password" type="password" placeholder="password" />
-        </FormControl>
-
-        <Button sx={{ mt: 1 }}>Create account</Button>
-        <Typography
-          endDecorator={<Link href="/">Log in</Link>}
-          fontSize="sm"
-          sx={{ alignSelf: 'center' }}
+        <Typography 
+        level='title-lg'
         >
-          Already have an account?
+          Projects
         </Typography>
-      </Sheet>
+
+        <Stack spacing={2} justifyContent={'flex-end'} direction={'row'}>
+          <Button
+            variant="soft"
+            color="neutral"
+            size="lg"
+            sx={{ minWidth: '100px' }}
+          >
+            New Project
+          </Button>
+        </Stack>
+      </Stack>
+
+      <Grid container spacing={2}>
+        {
+          projects.map((project) => (
+            <Grid item xs={12} md={6} lg={4} key={project.id}>
+              <ProjectGridItem project={project} />
+            </Grid>
+          ))
+        }
+      </Grid>
+
+
     </Sheet>
   );
 }

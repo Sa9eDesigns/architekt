@@ -1,3 +1,6 @@
+-- Supabase AI is experimental and may produce incorrect answers
+-- Always verify the output before executing
+
 -- Projects Table
 create table
   projects (
