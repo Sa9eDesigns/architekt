@@ -9,6 +9,9 @@ import Link from '@mui/joy/Link';
 import Header from '@/components/Dashboard/Header';
 import { Grid, Stack } from '@mui/material';
 import ProjectGridItem from '@/components/Project/ProjectItem';
+import { Skeleton } from '@mui/joy';
+import { useAction } from 'next-safe-action/hooks';
+import { getProjects } from '@/actions/Project';
 
 export default function Dashboard() {
 
@@ -64,16 +67,54 @@ export default function Dashboard() {
       </Stack>
 
       <Grid container spacing={2}>
-        {
-          projects.map((project) => (
-            <Grid item xs={12} md={6} lg={4} key={project.id}>
-              <ProjectGridItem project={project} />
-            </Grid>
-          ))
-        }
+        <React.Suspense fallback={<ProjectsSkeleton />}>
+          <ProjectsGrid projects={[]} />
+        </React.Suspense>
       </Grid>
 
 
     </Sheet>
   );
 }
+
+const ProjectsSkeleton = () => {
+  return (
+    <Grid container spacing={2}>
+      {[1, 2, 3].map((item) => (
+        <Grid item xs={12} sm={6} md={4} lg={3} key={item}>
+          <Skeleton variant="rectangular" height={200} />
+        </Grid>
+      ))}
+    </Grid>
+  );
+};
+
+
+//PROJECTS GRID
+interface I_ProjectsGridProps {
+  projects: {
+    id: number;
+    title: string;
+    description: string;
+    image: string;
+  }[];
+}
+
+interface P {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+}
+
+const ProjectsGrid: React.FC<I_ProjectsGridProps> = ({ projects }) => {
+  return (
+    <Grid container spacing={2}>
+      {projects.map((project) => (
+        <Grid item xs={12} sm={6} md={4} lg={3} key={project.id}>
+          {/* <ProjectGridItem project={project as P} /> */}
+        </Grid>
+      ))}
+    </Grid>
+  );
+};

@@ -39,7 +39,7 @@ interface SAGE_TextAreaProps {
 }
 
 
-export default function SAGE_TextArea({
+export default function MessageInput({
   isContextAware,
   CA_option,
   CA_change,

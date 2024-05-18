@@ -18,9 +18,10 @@ import ListDivider from '@mui/joy/ListDivider';
 import Drawer from '@mui/joy/Drawer';
 import ModalClose from '@mui/joy/ModalClose';
 import DialogTitle from '@mui/joy/DialogTitle';
-import { Icon } from '@iconify/react';
-
+import { Icon, InlineIcon } from '@iconify/react';
+import { useRouter } from 'next/router';
 import Navigation from './Navigation';
+import { useAIStore } from '@/stores/useAIStoreProvider';
 
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -54,7 +55,30 @@ function ColorSchemeToggle() {
 }
 
 export default function Header() {
+
+  //CONSTANTS
+  const router = useRouter();
+
+  //CONTEXT
+  const isAssistantVisible = useAIStore((state) => state.isAssistantVisible);
+  const assignAssistantVisibility = useAIStore(
+    (state) => state.assignAssistantVisibility
+  );
+
+  //STATES
   const [open, setOpen] = React.useState(false);
+
+  //FUNCTIONS
+  const toggleAssistant = () => {
+    assignAssistantVisibility(!isAssistantVisible);
+  };
+
+  const handleDashboardNavigation = (route: string) => {
+    //If we are already on the route, we don't want to navigate to the same route
+    if (router.pathname === route) return;
+    router.push(route);
+  }
+  
   return (
     <Box
       sx={{
@@ -67,7 +91,6 @@ export default function Header() {
         bgcolor: 'background.level0',
         boxShadow: 'sm',
         zIndex: '9999',
-        
       }}
     >
       <Stack
@@ -86,38 +109,38 @@ export default function Header() {
             borderRadius: '50%',
           }}
         >
-          <Icon icon="radix-icons:text" />
+          <img src="/images/logo-md.png" alt="Joy UI" />
         </IconButton>
         <Button
           variant="plain"
           color="neutral"
-          component="a"
-          href="/joy-ui/getting-started/templates/email/"
           size="sm"
           sx={{ alignSelf: 'center' }}
+          component="a"
+          onClick={() => handleDashboardNavigation('/dashboard/all-projects/')}
         >
-          Email
+          Projects
         </Button>
         <Button
           variant="plain"
           color="neutral"
           component="a"
-          href="/joy-ui/getting-started/templates/team/"
           size="sm"
           sx={{ alignSelf: 'center' }}
+          onClick={() => handleDashboardNavigation('/dashboard/organization/')}
         >
-          Team
+          Organization
         </Button>
         <Button
           variant="plain"
           color="neutral"
           aria-pressed="true"
           component="a"
-          href="/joy-ui/getting-started/templates/files/"
           size="sm"
           sx={{ alignSelf: 'center' }}
+          onClick={() => handleDashboardNavigation('/dashboard/settings/')}
         >
-          Files
+          Settings
         </Button>
       </Stack>
       <Box sx={{ display: { xs: 'inline-flex', sm: 'none' } }}>
@@ -130,7 +153,7 @@ export default function Header() {
           onClose={() => setOpen(false)}
         >
           <ModalClose />
-          <DialogTitle>Acme Co.</DialogTitle>
+          <DialogTitle>Architekt</DialogTitle>
           <Box sx={{ px: 1 }}>
             <Navigation />
           </Box>
@@ -176,16 +199,16 @@ export default function Header() {
         >
           <Icon icon="radix-icons:magnifying-glass" />
         </IconButton>
-        <Tooltip title="Joy UI overview" variant="outlined">
+        <Tooltip title="Toggle Assistant" variant="outlined">
           <IconButton
             size="sm"
-            variant="plain"
-            color="neutral"
+            variant={isAssistantVisible ? 'solid' : 'outlined'}
+            color={isAssistantVisible ? 'primary' : 'neutral'}
             component="a"
-            href="/blog/first-look-at-joy/"
+            onClick={toggleAssistant}
             sx={{ alignSelf: 'center' }}
           >
-            <Icon icon="radix-icons:bookmark" />
+            <InlineIcon icon={isAssistantVisible ? 'fluent:bot-sparkle-24-filled' : 'fluent:bot-sparkle-20-regular'} />
           </IconButton>
         </Tooltip>
         <ColorSchemeToggle />
@@ -225,34 +248,48 @@ export default function Header() {
                 />
                 <Box sx={{ ml: 1.5 }}>
                   <Typography level="title-sm" textColor="text.primary">
-                    Rick Sanchez
+                    Thando Zondo
                   </Typography>
                   <Typography level="body-xs" textColor="text.tertiary">
-                    rick@email.com
+                    sa9e@Architekt.app
                   </Typography>
                 </Box>
               </Box>
             </MenuItem>
             <ListDivider />
-            <MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleDashboardNavigation('/docs/');
+              }}
+            >
             <Icon icon="radix-icons:info-circled" />
               Help
             </MenuItem>
-            <MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleDashboardNavigation('/dashboard/settings/');
+              }}
+            >
             <Icon icon="radix-icons:gear" />
               Settings
             </MenuItem>
             <ListDivider />
-            <MenuItem component="a" href="/blog/first-look-at-joy/">
-              First look at Joy UI
-              <Icon icon="radix-icons:external-link" />
+            <MenuItem component="a" 
+            onClick={() => {
+              handleDashboardNavigation('/dashboard/Profile/');
+            }}
+            >
+              Profile 
+              <Icon icon="fluent:person-28-filled" />
             </MenuItem>
             <MenuItem
               component="a"
-              href="https://github.com/mui/material-ui/tree/master/docs/data/joy/getting-started/templates/email"
+              onClick={() => {
+                handleDashboardNavigation('/dashboard/Billing/');
+              }}
             >
-              Sourcecode
-              <Icon icon="radix-icons:external-link" />
+              Billing
+              <Icon icon="fluent:payment-28-filled " />
             </MenuItem>
             <ListDivider />
             <MenuItem>

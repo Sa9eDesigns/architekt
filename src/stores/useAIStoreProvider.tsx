@@ -6,13 +6,13 @@ import { type StoreApi, useStore } from 'zustand' // Importing types and hooks f
 
 // Importing types and functions related to the AIStore
 import {
-  type AIStore,
+  type T_AIStore,
   createAIStore,
   defaultInitState as initAIStore,
 } from './useAIStore'
 
 // Creating a context for the AIStore
-export const AIStoreContext = createContext<StoreApi<AIStore> | null>(null)
+export const AIStoreContext = createContext<StoreApi<T_AIStore> | null>(null)
 
 // Interface for the props of the AIStoreProvider component
 export interface AIStoreProviderProps {
@@ -22,7 +22,7 @@ export interface AIStoreProviderProps {
 // AIStoreProvider component
 export const AIStoreProvider = ({ children }: AIStoreProviderProps) => {
   // Using a ref to store the AIStore instance
-  const storeRef = useRef<StoreApi<AIStore>>()
+  const storeRef = useRef<StoreApi<T_AIStore>>()
 
   // Creating the AIStore instance if it doesn't exist
   if (!storeRef.current) {
@@ -38,7 +38,7 @@ export const AIStoreProvider = ({ children }: AIStoreProviderProps) => {
 }
 
 // Custom hook to access the AIStore
-export const useAIStore = <T,>(selector: (store: AIStore) => T): T => {
+export const useAIStore = <T,>(selector: (store: T_AIStore) => T): T => {
   // Getting the AIStore instance from the context
   const aiStoreContext = useContext(AIStoreContext)
 
@@ -50,3 +50,39 @@ export const useAIStore = <T,>(selector: (store: AIStore) => T): T => {
   // Using the zustand useStore hook to access the AIStore
   return useStore(aiStoreContext, selector)
 }
+
+/*AIStoreProvider Example Usage:
+// Import the AIStoreProvider in your _app.tsx file
+import { AIStoreProvider } from '@/providers/ai-store-provider'
+
+// Wrap your application with the AIStoreProvider
+function MyApp({ Component, pageProps }) {
+  return (
+    <AIStoreProvider>
+      <Component {...pageProps} />
+    </AIStoreProvider>
+  )
+}
+
+export default MyApp
+
+
+// Use the useAIStore hook in your components to access the AIStore
+import { useAIStore } from '@/providers/ai-store-provider'
+
+function MyComponent() {
+  const isAssistantVisible = useAIStore((state) => state.isAssistantVisible)
+  return <div>{isAssistantVisible ? 'Assistant is visible' : 'Assistant is hidden'}</div>
+}
+
+ //To call the actions of the AIStore, you can use the useAIStore hook with the action functions
+ e.g: Lets use the assignAssistantVisibility action function
+
+  import { useAIStore } from '@/providers/ai-store-provider'
+
+  function MyComponent() {
+    const assignAssistantVisibility = useAIStore((state) => state.assignAssistantVisibility)
+    return <button onClick={() => assignAssistantVisibility(true)}>Show Assistant</button>
+  }
+  
+*/

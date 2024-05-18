@@ -10,32 +10,36 @@ import fs from 'fs-extra';
 import path from 'path';
 import execa from 'execa';
 import { simpleGit, SimpleGit, CleanOptions } from 'simple-git';
-import { ProjectModel } from './models';
+//supabase - server
+import { createClient } from "@/supabase/server";
+import { Database } from '@/types/supabase';
 
 const git: SimpleGit = simpleGit().clean(CleanOptions.FORCE);
 
 /**
- * Create a new project
- * This function creates a new project directory and initializes a git repository
- * @param project - The project object containing the project details
- */
-export const createProject = async (project: ProjectModel) => {
-  try {
-    // Create the project directory
-    const projectDir = path.join(__dirname, `../../projects/${project.id}`);
-    await fs.ensureDir(projectDir);
+  * Get all projects for the user
+  * @param userId - the id of the user
+  * @returns - an array of all the projects for the user
+  * @returns - an empty array if the user has no projects
+  * @throws - an error if the user does not exist || if authentication fails
+  */
+export const getProjects = async (userId: string) => {
+  // Create a supabase client
+  const supabase = createClient();
 
-    // Initialize a git repository
-    await git.cwd(projectDir).init();
+  // Get all the projects for the user
+  const { data, error } = await supabase
+    .from('projects')
+    .select('*')
+    .eq('user_id', userId);
 
-    // Create the project file
-    const projectFile = path.join(projectDir, 'project.json');
-    await fs.writeJson(projectFile, project);
-
-    return project;
-  } catch (error) {
-    console.error(error);
-    return null;
+  // Throw an error if there was an error fetching the projects
+  if (error) {
+    throw new Error(error.message);
   }
 
+  // Return the projects
+  return data || [];
 }
+
+

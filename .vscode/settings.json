@@ -1,5 +1,6 @@
 {
   "explorer.fileNesting.enabled": true,
   "files.exclude": {},
-  "CodeGPT.apiKey": "CodeGPT Plus Beta"
+  "CodeGPT.apiKey": "CodeGPT Plus Beta",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
