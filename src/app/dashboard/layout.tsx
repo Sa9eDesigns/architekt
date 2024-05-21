@@ -48,24 +48,6 @@ export default function DashboardLayout({
         overflow: "hidden",
       }}
     >
-      {/*The Assistant Container will take 1/3 of the screen width when its visible*/}
-      <motion.div
-        initial={{ width: 0 }}
-        animate={{ width: isAssistantVisible ? "33.33%" : 0 }}
-        transition={{ duration: 0.4 }}
-        style={{
-          height: "100%",
-          backgroundColor: "background.level1",
-          borderRight: "1px solid",
-          borderColor: "divider",
-          zIndex: 100,
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {/*The Assistant Component*/}
-        <SageAI chat={undefined}/>
-      </motion.div>
       {/*The Dashboard Pages Container will take 2/3 of the screen width when the Assistant is visible*/}
       <Box
         sx={{
@@ -78,8 +60,30 @@ export default function DashboardLayout({
         {/*The Dashboard Pages*/}
         {children}
       </Box>
+      {/*The Assistant Container will take 1/3 of the screen width when its visible*/}
+      <motion.div
+        initial={{ width: 0 }}
+        animate={{ width: isAssistantVisible ? "33.33%" : 0 }}
+        transition={{
+          type: "spring",
+          damping: 10,
+          stiffness: 100,
+          duration: 0.3,
+         }}
+        style={{
+          height: "100%",
+          backgroundColor: "background.level1",
+          borderLeft: "0.5px solid",
+          borderColor: "divider",
+          zIndex: 100,
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/*The Assistant Component*/}
+        <SageAI chat={undefined} />
+      </motion.div>
     </Box>
-
-  )
+  );
   
 }

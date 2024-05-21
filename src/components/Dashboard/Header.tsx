@@ -19,7 +19,7 @@ import Drawer from '@mui/joy/Drawer';
 import ModalClose from '@mui/joy/ModalClose';
 import DialogTitle from '@mui/joy/DialogTitle';
 import { Icon, InlineIcon } from '@iconify/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Navigation from './Navigation';
 import { useAIStore } from '@/stores/useAIStoreProvider';
 
@@ -75,22 +75,21 @@ export default function Header() {
 
   const handleDashboardNavigation = (route: string) => {
     //If we are already on the route, we don't want to navigate to the same route
-    if (router.pathname === route) return;
     router.push(route);
   }
   
   return (
     <Box
       sx={{
-        display: 'flex',
+        display: "flex",
         flexGrow: 1,
-        justifyContent: 'space-between',
+        justifyContent: "space-between",
         px: 2,
         py: 1,
         gap: 1.5,
-        bgcolor: 'background.level0',
-        boxShadow: 'sm',
-        zIndex: '9999',
+        bgcolor: "background.level0",
+        boxShadow: "sm",
+        zIndex: "9999",
       }}
     >
       <Stack
@@ -98,9 +97,9 @@ export default function Header() {
         justifyContent="center"
         alignItems="center"
         spacing={1}
-        sx={{ display: { xs: 'none', sm: 'flex' } }}
+        sx={{ display: { xs: "none", sm: "flex" } }}
       >
-        <IconButton
+        {/* <IconButton
           size="md"
           variant="outlined"
           color="neutral"
@@ -110,14 +109,24 @@ export default function Header() {
           }}
         >
           <img src="/images/logo-md.png" alt="Joy UI" />
-        </IconButton>
+        </IconButton> */}
+        <Typography
+          level="title-lg"
+          sx={{
+            fontFamily: "var(--font-inno)",
+            color: "var(--joy-palette-text-primary)",
+            fontSize: "x-large",
+          }}
+        >
+          ARCHITEKT
+        </Typography>
         <Button
           variant="plain"
           color="neutral"
           size="sm"
-          sx={{ alignSelf: 'center' }}
+          sx={{ alignSelf: "center" }}
           component="a"
-          onClick={() => handleDashboardNavigation('/dashboard/all-projects/')}
+          onClick={() => handleDashboardNavigation("/dashboard/all-projects/")}
         >
           Projects
         </Button>
@@ -126,8 +135,8 @@ export default function Header() {
           color="neutral"
           component="a"
           size="sm"
-          sx={{ alignSelf: 'center' }}
-          onClick={() => handleDashboardNavigation('/dashboard/organization/')}
+          sx={{ alignSelf: "center" }}
+          onClick={() => handleDashboardNavigation("/dashboard/organization/")}
         >
           Organization
         </Button>
@@ -137,18 +146,22 @@ export default function Header() {
           aria-pressed="true"
           component="a"
           size="sm"
-          sx={{ alignSelf: 'center' }}
-          onClick={() => handleDashboardNavigation('/dashboard/settings/')}
+          sx={{ alignSelf: "center" }}
+          onClick={() => handleDashboardNavigation("/dashboard/settings/")}
         >
           Settings
         </Button>
       </Stack>
-      <Box sx={{ display: { xs: 'inline-flex', sm: 'none' } }}>
-        <IconButton variant="plain" color="neutral" onClick={() => setOpen(true)}>
-        <Icon icon="radix-icons:hamburger-menu" />
+      <Box sx={{ display: { xs: "inline-flex", sm: "none" } }}>
+        <IconButton
+          variant="plain"
+          color="neutral"
+          onClick={() => setOpen(true)}
+        >
+          <Icon icon="radix-icons:hamburger-menu" />
         </IconButton>
         <Drawer
-          sx={{ display: { xs: 'inline-flex', sm: 'none' } }}
+          sx={{ display: { xs: "inline-flex", sm: "none" } }}
           open={open}
           onClose={() => setOpen(false)}
         >
@@ -161,10 +174,10 @@ export default function Header() {
       </Box>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'row',
+          display: "flex",
+          flexDirection: "row",
           gap: 1.5,
-          alignItems: 'center',
+          alignItems: "center",
         }}
       >
         <Input
@@ -176,7 +189,7 @@ export default function Header() {
             <IconButton
               variant="outlined"
               color="neutral"
-              sx={{ bgcolor: 'background.level1' }}
+              sx={{ bgcolor: "background.level1" }}
             >
               <Typography level="title-sm" textColor="text.icon">
                 ⌘ K
@@ -184,10 +197,10 @@ export default function Header() {
             </IconButton>
           }
           sx={{
-            alignSelf: 'center',
+            alignSelf: "center",
             display: {
-              xs: 'none',
-              sm: 'flex',
+              xs: "none",
+              sm: "flex",
             },
           }}
         />
@@ -195,20 +208,29 @@ export default function Header() {
           size="sm"
           variant="outlined"
           color="neutral"
-          sx={{ display: { xs: 'inline-flex', sm: 'none' }, alignSelf: 'center' }}
+          sx={{
+            display: { xs: "inline-flex", sm: "none" },
+            alignSelf: "center",
+          }}
         >
           <Icon icon="radix-icons:magnifying-glass" />
         </IconButton>
         <Tooltip title="Toggle Assistant" variant="outlined">
           <IconButton
             size="sm"
-            variant={isAssistantVisible ? 'solid' : 'outlined'}
-            color={isAssistantVisible ? 'primary' : 'neutral'}
+            variant={isAssistantVisible ? "solid" : "outlined"}
+            color={isAssistantVisible ? "primary" : "neutral"}
             component="a"
             onClick={toggleAssistant}
-            sx={{ alignSelf: 'center' }}
+            sx={{ alignSelf: "center" }}
           >
-            <InlineIcon icon={isAssistantVisible ? 'fluent:bot-sparkle-24-filled' : 'fluent:bot-sparkle-20-regular'} />
+            <InlineIcon
+              icon={
+                isAssistantVisible
+                  ? "fluent:bot-sparkle-24-filled"
+                  : "fluent:bot-sparkle-20-regular"
+              }
+            />
           </IconButton>
         </Tooltip>
         <ColorSchemeToggle />
@@ -216,35 +238,39 @@ export default function Header() {
           <MenuButton
             variant="plain"
             size="sm"
-            sx={{ maxWidth: '32px', maxHeight: '32px', borderRadius: '9999999px' }}
+            sx={{
+              maxWidth: "32px",
+              maxHeight: "32px",
+              borderRadius: "9999999px",
+            }}
           >
             <Avatar
               src="https://i.pravatar.cc/40?img=2"
               srcSet="https://i.pravatar.cc/80?img=2"
-              sx={{ maxWidth: '32px', maxHeight: '32px' }}
+              sx={{ maxWidth: "32px", maxHeight: "32px" }}
             />
           </MenuButton>
           <Menu
             placement="bottom-end"
             size="sm"
             sx={{
-              zIndex: '99999',
+              zIndex: "99999",
               p: 1,
               gap: 1,
-              '--ListItem-radius': 'var(--joy-radius-sm)',
+              "--ListItem-radius": "var(--joy-radius-sm)",
             }}
           >
             <MenuItem>
               <Box
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
                 <Avatar
                   src="https://i.pravatar.cc/40?img=2"
                   srcSet="https://i.pravatar.cc/80?img=2"
-                  sx={{ borderRadius: '50%' }}
+                  sx={{ borderRadius: "50%" }}
                 />
                 <Box sx={{ ml: 1.5 }}>
                   <Typography level="title-sm" textColor="text.primary">
@@ -259,33 +285,34 @@ export default function Header() {
             <ListDivider />
             <MenuItem
               onClick={() => {
-                handleDashboardNavigation('/docs/');
+                handleDashboardNavigation("/docs/");
               }}
             >
-            <Icon icon="radix-icons:info-circled" />
+              <Icon icon="radix-icons:info-circled" />
               Help
             </MenuItem>
             <MenuItem
               onClick={() => {
-                handleDashboardNavigation('/dashboard/settings/');
+                handleDashboardNavigation("/dashboard/settings/");
               }}
             >
-            <Icon icon="radix-icons:gear" />
+              <Icon icon="radix-icons:gear" />
               Settings
             </MenuItem>
             <ListDivider />
-            <MenuItem component="a" 
-            onClick={() => {
-              handleDashboardNavigation('/dashboard/Profile/');
-            }}
+            <MenuItem
+              component="a"
+              onClick={() => {
+                handleDashboardNavigation("/dashboard/Profile/");
+              }}
             >
-              Profile 
+              Profile
               <Icon icon="fluent:person-28-filled" />
             </MenuItem>
             <MenuItem
               component="a"
               onClick={() => {
-                handleDashboardNavigation('/dashboard/Billing/');
+                handleDashboardNavigation("/dashboard/Billing/");
               }}
             >
               Billing
@@ -293,7 +320,7 @@ export default function Header() {
             </MenuItem>
             <ListDivider />
             <MenuItem>
-            <Icon icon="radix-icons:exit" />
+              <Icon icon="radix-icons:exit" />
               Log out
             </MenuItem>
           </Menu>

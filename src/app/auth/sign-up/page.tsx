@@ -24,34 +24,6 @@ const supabase = createClient(`${process.env.NEXT_PUBLIC_SUPABASE_URL}`, `${proc
 
 //COMPONENTS
 //--Toggle light/dark mode
-function ColorSchemeToggle(props: IconButtonProps) {
-  const { onClick, ...other } = props;
-  const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => setMounted(true), []);
-
-  return (
-    <IconButton
-      aria-label="toggle light/dark mode"
-      size="sm"
-      variant="outlined"
-      disabled={!mounted}
-      onClick={(event) => {
-        setMode(mode === "light" ? "dark" : "light");
-        onClick?.(event);
-      }}
-      {...other}
-    >
-      {mode === "light" ? (
-        <Icon icon="radix-icons:moon" />
-      ) : (
-        <Icon icon="radix-icons:sun" />
-      )}
-    </IconButton>
-  );
-}
-
 export default function SignIn() {
   return (
     <>
@@ -105,7 +77,6 @@ export default function SignIn() {
                 ARCHITEKT
               </Typography>
             </Box>
-            <ColorSchemeToggle />
           </Box>
 
           {/* Auth component */}

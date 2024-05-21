@@ -13,8 +13,19 @@ type T_SageAIProps = {
 };
 
 export default function SageAI(props: T_SageAIProps) {
+
+  //AI Identity
+  const AI={
+    name: "SAGE",
+    username: "sage_ai",
+    avatar: "/images/logo-md.png",
+    online: true
+  }
+
   const { chat } = props;
+
   const [chatMessages, setChatMessages] = React.useState(chat?.messages);
+
   const [textAreaValue, setTextAreaValue] = React.useState("");
 
   React.useEffect(() => {
@@ -30,7 +41,7 @@ export default function SageAI(props: T_SageAIProps) {
         backgroundColor: "background.level1",
       }}
     >
-      <MessagesPaneHeader sender={chat ? chat.sender : undefined} />
+      <MessagesPaneHeader sender={AI} />
       <Box
         sx={{
           display: "flex",

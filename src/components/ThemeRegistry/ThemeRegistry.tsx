@@ -8,7 +8,7 @@ import theme from './theme';
 export default function ThemeRegistry({ children }: { children: React.ReactNode }) {
   return (
     <NextAppDirEmotionCacheProvider options={{ key: 'joy' }}>
-      <CssVarsProvider theme={theme}>
+      <CssVarsProvider theme={theme} defaultMode='dark'>
         <CssBaseline />
         {children}
       </CssVarsProvider>

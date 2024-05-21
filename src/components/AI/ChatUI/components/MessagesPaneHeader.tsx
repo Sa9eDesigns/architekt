@@ -27,8 +27,8 @@ export default function MessagesPaneHeader(props: MessagesPaneHeaderProps) {
         borderColor: 'divider',
         backgroundColor: 'background.body',
       }}
-      py={{ xs: 2, md: 2 }}
-      px={{ xs: 1, md: 2 }}
+      py={{ xs: 1, md: 1 }}
+      px={{ xs: 1, md: 1 }}
     >
       <Stack direction="row" spacing={{ xs: 1, md: 2 }} alignItems="center">
         <IconButton
@@ -42,11 +42,11 @@ export default function MessagesPaneHeader(props: MessagesPaneHeaderProps) {
         >
           <ArrowBackIosNewRoundedIcon />
         </IconButton>
-        <Avatar size="lg" src={sender.avatar} />
+        <Avatar size="sm" src={sender.avatar} />
         <div>
           <Typography
-            fontWeight="lg"
-            fontSize="lg"
+            fontWeight="md"
+            fontSize="md"
             component="h2"
             noWrap
             endDecorator={
@@ -68,9 +68,9 @@ export default function MessagesPaneHeader(props: MessagesPaneHeaderProps) {
               ) : undefined
             }
           >
-            {sender.name}
+            
           </Typography>
-          <Typography level="body-sm">{sender.username}</Typography>
+          {/* <Typography level="body-sm">{sender.username}</Typography> */}
         </div>
       </Stack>
       <Stack spacing={1} direction="row" alignItems="center">
