@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ESNext",
     "lib": ["ES6", "DOM"],
     "noImplicitAny": true,
     "noImplicitThis": true,

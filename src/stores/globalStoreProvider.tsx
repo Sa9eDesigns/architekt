@@ -45,3 +45,4 @@ export const useGlobalStore = <T,>(
 
   return useStore(globalStoreContext, selector)
 }
+

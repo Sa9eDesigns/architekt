@@ -3,11 +3,12 @@ import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { DragOverEvent, ItemCallback, Layout, Responsive, WidthProvider } from "react-grid-layout";
 import { ResizeHandleAxis } from "@/components/Modules/Editors/AchiTypeEditor/Context/EditorStore";
 import { UUID } from "crypto";
+import { action } from '../../.history/src/library/SAGEAI/safe-action_20240518030942';
 
 /*===========================
 USERS AND AUTHENTICATION TYPES
 ===========================*/
-export interface User {
+export interface I_User {
   id: number;
   auth_uid: UUID;
   email: string;
@@ -21,61 +22,105 @@ export interface User {
   last_login: string;
 }
 
-export interface Organization {
+export interface I_Organization {
   id: UUID
   name: string;
   description: string;
-  owner: User;
-  members: User[];
+  owner: I_User;
+  members: I_User[];
   created_at: string;
 }
 
 export interface AuthToken {
   token: string;
-  user: User;
-  organization: Organization;
-  expires_at: string;
+  expires_at?: string;
 }
-
-export interface AuthState {
-  user: User | null;
-  token: AuthToken | null;
-  organization: Organization | null;
-  isAuthenticated: boolean;
-  loading: boolean;
-  error: string | null;
-}
-
-export interface AuthContextType {
-  state: AuthState;
-  login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
-  logout: () => void;
-}
-
 
 /*===========================
 Project Types And Interfaces
 ===========================*/
-export interface Project {
-  id: UUID | null;
+export interface I_Project {
+  id: string;
   name: string;
   description: string;
-  organization: Organization;
-  startdate: string;
-  enddate: string;
-  status: string;
-  template: ITemplate;
-  application: Application;
+  organization: I_Organization;
+  created_at: string;
+  updated_at: string;
+  
 }
 
-export interface ITemplate {
-  id: string,
+/*--PRIMITIVE CONTAINER
+-- a primitive container is a droppable area that can contain primitive elements
+-- it is a grid layout with PrimitiveElements as items
+-- its Properties include layout configuration, Styles, and event callbacks
+*/
+export interface PrimitiveContainer {
+  id: string;
   name: string;
-  description: string;
-  ui: "MUI" | "BaseUI";
-  templateUrl: "string";
+  layout: PrimitiveElement[];
 }
+
+/*PRIMITIVE ELEMENT
+--a primitive element is a draggable, resizable UI element that can be added to a PrimitiveContainer
+-- it renders a React element that can be customized using properties, attributes, and styles
+-- There are different types of primitive elements Leaf Elements, Container Elements
+* Leaf Elements: Basic UI elements such as text, image, button, etc.
+* Container Elements: Elements that can contain other elements such as a grid, list, etc.
+-- Leaf Elements share the following properties:
+* id: Unique identifier for the element
+* type: Type of the element | The type is important when selecting the value source for the element
+* name: Name of the element | The name is used for display purposes
+* render: React element to be rendered | The actual UI element to be rendered
+* styles: CSS styles for the element | Styles for the element such as color, font size, etc.
+* properties: Properties or attributes associated with the element | Properties for the element such as text content, image source, etc.
+* actions: Actions that can be triggered by the element | Actions that can be triggered by the element such as onClick, onHover, etc.
+* db_query: Database query to fetch data for the element | Database query to fetch data for the element
+*/
+export interface PrimitiveElement {
+  id: string;
+  name: string;
+  type: string;
+  render: {
+    element: JSX.Element;
+    props: Record<string, any>;
+  },
+  layout: {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    minW: number;
+    minH: number;
+    maxW: number;
+    maxH: number;
+    static: boolean;
+    isDraggable: boolean;
+    isResizable: boolean;
+  },
+  //Actions| an array of flow-builder configurations that define the actions that can be triggered by the element
+  actions: {
+    type: string;
+    config: Record<string, any>;
+  }[];
+  //Properties| an array of Objects. Each object represents a property group with a record of key-value pairs
+  properties: {
+    group: string;
+    properties: Record<string, any>;
+  }[];
+  //Styles| an array of Objects. Each object represents a style group with a record of key-value pairs
+  styles: {
+    group: string;
+    styles: Record<string, any>;
+  }[];
+  //Database Query | A configuration object that defines the database query to fetch data for the element
+  db_query: {
+    table: string;
+    columns: string[];
+    conditions: Record<string, any>;
+  };
+}
+
+
 
 
 /*======================================================
@@ -85,21 +130,15 @@ Application Types And Interfaces
 export interface Application {
   id: string;
   name: string;
-  components: Component[];
-  pages: DroppableArea[]; // Use DroppableArea type for pages
-  database: ApplicationDatabase;
-  dataModels: ApplicationDataModel[];
-  theme: ApplicationTheme;
-  files: ApplicationFiles;
-  settings: ApplicationSettings;
 }
+
+
 
 //--COMPONENTS
 //--a component is a reusable UI element that can be added to a page
 //--it is Composed of a React-Grid-Layout where each GridItem is a PrimitiveElement
 //--a component can have multiple actions that are triggered by events
 //--a component can also have parameters that can be customized aand passed to its children(PrimitiveElements)
-
 export interface Component {
   Id: UUID
   Name: string;
@@ -181,49 +220,6 @@ export interface ComponentLayoutPreviewMode {
   IsDroppable: false;
   ResizeHandles: null;
   InnerRef: { current: null | HTMLDivElement };
-}
-
-//--primitive element
-//--a primitive element is a basic building block of a component
-//--it represents a UI element that can be rendered on the screen
-//--a primitive element is a grid item within a layout and therefore has React-Grid-Layout GridItem properties
-//--a primitive element callbacks and Captured by its parent component(in this case, a component)
-export interface PrimitiveElement {
-  id: string; // Unique identifier for the element
-  name?: string; // Name of the element (optional)
-  description?: string; // Description of the element (optional)
-  x: number; // X-coordinate position within the layout grid
-  y: number; // Y-coordinate position within the layout grid
-  w: number; // Width of the element within the grid
-  h: number; // Height of the element within the grid
-  minW?: number; // Minimum width the element can have (optional)
-  maxW?: number; // Maximum width the element can have (optional)
-  minH?: number; // Minimum height the element can have (optional)
-  maxH?: number; // Maximum height the element can have (optional)
-  static: boolean; // Indicates if the element is static (cannot be moved or resized)
-  isBounded?: boolean; // Indicates if the element is bounded within its container (optional)
-  isDraggable?: boolean; // Indicates if the element can be dragged
-  isResizable?: boolean; // Indicates if the element can be resized
-  allowOverlap?: boolean; // Indicates if the element can overlap with other elements
-  element: JSX.Element; // The actual element to be rendered
-  containerProps?: {
-    // Properties for styling the container of the element (optional)
-    margin: [number, number]; // Margin values for the container
-    padding: [number, number]; // Padding values for the container
-    align: "left" | "center" | "right"; // Alignment of the content within the container
-    justify: "flex-start" | "center" | "flex-end"; // Justification of the content within the container
-    backgroundColor?: string; // Background color of the container (optional)
-    border?: string; // Border style of the container (optional)
-    className?: string; // Custom CSS class for the container (optional)
-  };
-  // Event callbacks
-  onDragStart?: () => void;
-  onDrag?: () => void;
-  onDragStop?: () => void;
-  onResizeStart?: () => void;
-  onResize?: () => void;
-  onResizeStop?: () => void;
-  onDrop?: (item: PrimitiveElement, e: MouseEvent) => void;
 }
 
 //--component -> primitive element -> (rendered) element

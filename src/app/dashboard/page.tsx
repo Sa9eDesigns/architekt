@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import Sheet from '@mui/joy/Sheet';
 import Typography from '@mui/joy/Typography';
@@ -9,18 +11,20 @@ import Link from '@mui/joy/Link';
 import Header from '@/components/Dashboard/Header';
 import { Grid, Stack } from '@mui/material';
 import ProjectGridItem from '@/components/Project/ProjectItem';
-import { Skeleton } from '@mui/joy';
+import { Box, Container, Skeleton } from '@mui/joy';
 import { useAction } from 'next-safe-action/hooks';
 import { getProjects } from '@/actions/Project';
+import demoProjects from '@/demo/projects/projects';
+import { ProjectItem } from '@/types/projects';
 
 export default function Dashboard() {
 
   //CONSTANTS
   
   //STATES
-  
 
   //FUNCTIONS
+
   
   //HOOKS
 
@@ -58,7 +62,7 @@ export default function Dashboard() {
           <Button
             variant="soft"
             color="neutral"
-            size="lg"
+            size="md"
             sx={{ minWidth: '100px' }}
           >
             New Project
@@ -66,11 +70,7 @@ export default function Dashboard() {
         </Stack>
       </Stack>
 
-      <Grid container spacing={2}>
-        <React.Suspense fallback={<ProjectsSkeleton />}>
-          <ProjectsGrid projects={[]} />
-        </React.Suspense>
-      </Grid>
+      <ProjectsGrid projects={demoProjects} />
 
 
     </Sheet>
@@ -92,12 +92,7 @@ const ProjectsSkeleton = () => {
 
 //PROJECTS GRID
 interface I_ProjectsGridProps {
-  projects: {
-    id: number;
-    title: string;
-    description: string;
-    image: string;
-  }[];
+  projects: ProjectItem[];
 }
 
 interface P {
@@ -109,12 +104,18 @@ interface P {
 
 const ProjectsGrid: React.FC<I_ProjectsGridProps> = ({ projects }) => {
   return (
-    <Grid container spacing={2}>
-      {projects.map((project) => (
-        <Grid item xs={12} sm={6} md={4} lg={3} key={project.id}>
-          {/* <ProjectGridItem project={project as P} /> */}
-        </Grid>
-      ))}
-    </Grid>
+    <Box sx={{
+      padding: '1rem',
+      width: '100%',
+    }}
+    >
+      <Grid container spacing={2}>
+        {projects.map((project) => (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={project.id}>
+            <ProjectGridItem project={project as ProjectItem} />
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 };

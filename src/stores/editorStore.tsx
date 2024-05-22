@@ -1,4 +1,1 @@
-/*
-Editor Store Definition
-
-*/
+/* This Defines the Editor Stores.*/

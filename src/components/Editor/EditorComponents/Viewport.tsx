@@ -5,21 +5,13 @@
   --it is the main canvas component
 */
 
-import React, { Component } from "react";
-import { 
-  useNode, 
-  useEditor,
-  Frame,
-  Element,
-  NodeHelpers
-} from "@craftjs/core";
-import {
-  Box,
-} from "@mui/joy";
-import { Icon } from "@iconify/react";
+import React from "react";
+import { useNode, useEditor, Frame, Element } from "@craftjs/core";
+import { Box } from "@mui/joy";
+import FrameContainer from "./FrameContainer";
 
-//Viewport Component
-const Viewport = () => {
+// Viewport Component
+const Viewport: React.FC = () => {
   const { query } = useEditor();
   const { id, related } = useNode((node) => ({
     id: node.id,
@@ -38,39 +30,6 @@ const Viewport = () => {
       </Frame>
     </Box>
   );
-}
+};
 
-
-//FrameContainer Component
-interface FrameContainerProps {
-  children: React.ReactNode
-}
-interface FrameContainerInterface extends React.FC<FrameContainerProps> {
-  craft: object
-}
-
-export const FrameContainer: FrameContainerInterface = ({ children }) => {
-  const { connectors } = useNode()
-
-  return (
-    <div
-      ref={(ref) => connectors.connect(ref as HTMLElement)}
-      style={{ width: '100%', minHeight: '800px' }}
-      className="bg-white"
-    >
-      {children}
-    </div>
-  )
-}
-
-FrameContainer.craft = {
-  displayName: 'Frame',
-  props: {},
-  rules: {
-    canDrag: () => true,
-  },
-  related: {},
-}
-
-
-
+export default Viewport;

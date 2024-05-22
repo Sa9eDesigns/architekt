@@ -1,73 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import _ from 'lodash';
-import { Responsive, WidthProvider } from 'react-grid-layout';
-const ResponsiveReactGridLayout = WidthProvider(Responsive);
-import DraggableContainer from './draggableItem'; // Import DraggableContainer
-//Context
+import React, { useState, useEffect } from "react";
+import { Responsive, WidthProvider, Layout } from "react-grid-layout";
+import DraggableContainer from "./Components/DraggableContainer";
+import { useComponentComposerStoreContext } from "./Context/ComponentComposerProvider";
+import { Box } from "@mui/material";
+import { LayoutItem } from "./Context/ComponentComposerStore";
 
-//INTERFACES
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
+
 interface CanvasProps {
-  onLayoutChange: (layout: any, layouts: any) => void;
+  onLayoutChange: (
+    layout: Layout[],
+    layouts: { [key: string]: Layout[] }
+  ) => void;
   cols: { [key: string]: number };
 }
 
-//--a layout item is a configuration for a component that is being rendered in the layout
-//--it contains the properties of the component
-interface LayoutItem{
-  /*react-grid-layout
-  /--------------- */
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  i: string;
-  minW: number | undefined;
-  maxW: number | undefined;
-  minH: number | undefined;
-  maxH: number | undefined;
-  static: boolean;
-  isDraggable: boolean | undefined;
-  isResizable: boolean | undefined;
-  /*Architype
-  /--------------- */
-  id: string; //id to identify the component without
-  component: any; //component that is being rendered
-  props: any; //Props for the component
-  children: any; //Children for the component
-  //--events for the component
-  onClick: (event: any) => void; //run when the component is clicked
-  onInfo: (event: any) => void; //returns the information of the component
-  onEdit: (event: any) => void; //returns the editor of the component
-  onDelete: (event: any) => void; //deletes the component
-  onDuplicate: (event: any) => void; //duplicates the component
-  onMove: (event: any) => void; //moves the component
-  onResize: (event: any) => void; //resizes the component
-}
-
-//TYPES
-type CompactType = 'vertical' | 'horizontal';
-
-//COMPONENTS
-const generateLayout = () => {
-  return _.map(_.range(0, 25), (item, i) => {
-    const y = Math.ceil(Math.random() * 4) + 1;
-    return {
-      x: Math.round(Math.random() * 5) * 2,
-      y: Math.floor(i / 6) * y,
-      w: 2,
-      h: y,
-      i: i.toString(),
-      static: Math.random() < 0.05,
-    };
-  });
-};
-
-//DEFAULT COMPONENT
-const LayoutCanvas: React.FC<CanvasProps> = ({ onLayoutChange, cols, ...props }) => {
-  const [currentBreakpoint, setCurrentBreakpoint] = useState('lg');
-  const [compactType, setCompactType] = useState('vertical' as CompactType);
-  const [layouts, setLayouts] = useState({ lg: generateLayout() });
+const LayoutCanvas: React.FC<CanvasProps> = ({
+  onLayoutChange,
+  cols,
+  ...props
+}) => {
+  const layout = useComponentComposerStoreContext((state) => state.layout);
+  const handleOnDrop = useComponentComposerStoreContext(
+    (state) => state.handleOnDrop
+  );
+  const handleOnLayoutChange = useComponentComposerStoreContext(
+    (state) => state.handleOnLayoutChange
+  );
+  const handleOnSelectComponent = useComponentComposerStoreContext(
+    (state) => state.handleOnSelectComponent
+  );
+  const handleOnDeleteComponent = useComponentComposerStoreContext(
+    (state) => state.handleOnDeleteComponent
+  );
+  const handleOnDuplicateComponent = useComponentComposerStoreContext(
+    (state) => state.handleOnDuplicateComponent
+  );
+  const handleOnMoveComponent = useComponentComposerStoreContext(
+    (state) => state.handleOnMoveComponent
+  );
+  const handleOnResizeComponent = useComponentComposerStoreContext(
+    (state) => state.handleOnResizeComponent
+  );
+  const handleOnEditComponent = useComponentComposerStoreContext(
+    (state) => state.handleOnEditComponent
+  );
+  const [currentBreakpoint, setCurrentBreakpoint] = useState("lg");
+  const [compactType, setCompactType] = useState<"vertical" | "horizontal">(
+    "vertical"
+  );
   const [mounted, setMounted] = useState(false);
+  const [selectedComponent, setSelectedComponent] = useState<LayoutItem | null>(
+    null
+  );
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -77,64 +63,92 @@ const LayoutCanvas: React.FC<CanvasProps> = ({ onLayoutChange, cols, ...props })
     setCurrentBreakpoint(breakpoint);
   };
 
-  const onCompactTypeChange = () => {
-    setCompactType((prevCompactType) =>
-      prevCompactType === 'horizontal'? 'vertical' : 'horizontal'
-    );
-  };
-
-  const onLayoutChangeCallback = (layout: any, layouts: any) => {
+  const onLayoutChangeCallback = (
+    layout: Layout[],
+    layouts: { [key: string]: Layout[] }
+  ) => {
+    handleOnLayoutChange(layout as LayoutItem[]);
     onLayoutChange(layout, layouts);
   };
 
-  const onDrop = (layout: any, layoutItem: any, event: any) => {
-    const droppedElement = event.relatedTarget; // Get the dropped element
-    if (droppedElement && droppedElement.nodeName === 'DIV') { // Check if the dropped element is a div
-      const id = droppedElement.getAttribute('data-grid-id'); // Get the id of the dropped element
-      const droppedItem = layouts.lg.find((item: any) => item.i === id); // Find the corresponding layout item
-      if (droppedItem) {
-        // Replace the layout item with the dropped DraggableContainer
-        layouts.lg[layoutItem.i] = { ...droppedItem, x: layoutItem.x, y: layoutItem.y, w: layoutItem.w, h: layoutItem.h };
-        setLayouts({ ...layouts });
-      }
+  const onDrop = (layoutItem: LayoutItem, event: any) => {
+    const droppedElementId = event.dataTransfer?.getData("text/plain");
+    if (droppedElementId) {
+      const newComponent: LayoutItem = {
+        x: layoutItem.x,
+        y: layoutItem.y,
+        w: layoutItem.w,
+        h: layoutItem.h,
+        i: layoutItem.i,
+        id: `component-${layoutItem.i}`,
+        component: React.createElement("div", { key: `component-${layoutItem.i}` }),
+        props: {},
+        children: null,
+        onClick: () => handleComponentClick(layoutItem.i),
+        onInfo: () => alert(`Info of component ${layoutItem.i}`),
+        onEdit: () => handleOnEditComponent(layoutItem),
+        onDelete: () => handleOnDeleteComponent(layoutItem),
+        onDuplicate: () => handleOnDuplicateComponent(layoutItem),
+        onMove: () =>
+          handleOnMoveComponent(layoutItem, layoutItem.x, layoutItem.y),
+        onResize: () =>
+          handleOnResizeComponent(layoutItem, layoutItem.w, layoutItem.h),
+        static: false,
+        isDraggable: true,
+        isResizable: true,
+      };
+      handleOnDrop(newComponent);
     }
   };
 
+  const handleComponentClick = (id: string) => {
+    const component = layout.find((item) => item.i === id);
+    if (component) {
+      handleOnSelectComponent(component);
+      setSelectedComponent(component);
+      setModalOpen(true);
+    }
+  };
+
+  const handleSave = (updatedComponent: LayoutItem) => {
+    handleOnEditComponent(updatedComponent);
+  };
+
   const generateDOM = () => {
-    return _.map(layouts.lg, (l, i) => (
+    return layout.map((l) => (
       <DraggableContainer
-        key={i}
+        key={l.i}
         id={l.i}
         x={l.x}
         y={l.y}
         w={l.w}
         h={l.h}
         static={l.static}
+        onClick={l.onClick}
       >
-        {/* Render the children of the DraggableContainer */}
-        {_.times(_.random(1, 6), (j) => (
-          <div key={j}>Item {i}-{j}</div>
-        ))}
+        {l.children || <div>{l.component}</div>}
       </DraggableContainer>
     ));
   };
 
   return (
-    <div style={{
-      height: "100%",
-      width: "100%",
-      overflow: "auto",
-      backgroundColor: "white",
-      padding: "1rem",
-    }}>
+    <Box
+      sx={{
+        height: "100%",
+        width: "100%",
+        overflow: "auto",
+        backgroundColor: "white",
+        padding: "1rem",
+      }}
+    >
       <ResponsiveReactGridLayout
-        //ID
-        className="architype-layout"
+        className="component-composer-layout"
         autoSize={true}
-        layouts={layouts}
+        layouts={{ lg: layout }}
+        cols={cols}
         onBreakpointChange={onBreakpointChange}
         onLayoutChange={onLayoutChangeCallback}
-        onDrop={onDrop}
+        onDrop={(layoutItem, event) => onDrop(layoutItem as unknown as LayoutItem, event)}
         measureBeforeMount={false}
         useCSSTransforms={mounted}
         compactType={compactType}
@@ -143,7 +157,7 @@ const LayoutCanvas: React.FC<CanvasProps> = ({ onLayoutChange, cols, ...props })
       >
         {generateDOM()}
       </ResponsiveReactGridLayout>
-    </div>
+    </Box>
   );
 };
 

@@ -3,16 +3,10 @@ This Defines The Left Sidebar of the Layout Editor
 */
 
 import React from "react";
+//import all the components from the MUI Library
 import {
-  Box,
-  Button,
-  Card,
-  Divider,
-  Grid,
-  IconButton,
-  ToggleButtonGroup,
-  Typography,
-} from "@mui/joy";
+
+} from "@mui/material";
 import { Icon } from "@iconify/react";
 //import { useEditor } from "../Hooks/useEditor";
 import { atom } from "jotai";
@@ -21,7 +15,9 @@ import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 
 const LeftSidebar = () => {
+
   //COMPONENTS
+
 
   //FUNCTIONS
 

@@ -52,6 +52,7 @@ export const useAIStore = <T,>(selector: (store: T_AIStore) => T): T => {
 }
 
 /*AIStoreProvider Example Usage:
+
 // Import the AIStoreProvider in your _app.tsx file
 import { AIStoreProvider } from '@/providers/ai-store-provider'
 

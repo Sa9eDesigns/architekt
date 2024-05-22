@@ -25,17 +25,24 @@ export interface ProjectForm {
 }
 
 export interface ITemplate {
-  id: number;
+  id: number | string;
   name: string;
   description: string;
   ui: "MUI" | "BaseUI";
+  templateUrl: string | null;
+  directory: string | null;
 }
 
 export interface ProjectItem {
-  id: number;
+  id: string | number;
   name: string;
   description: string;
+  organization: string;
+  created_at: string;
+  updated_at: string;
+  status: string;
   template: ITemplate;
+  image: string;
 }
 
 /*======================================================

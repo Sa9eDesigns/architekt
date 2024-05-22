@@ -1,42 +1,37 @@
-/*
-This Defines The Toolbar Item of the Layout Editor
-- This is a draggable item that can be added to the layout that contains a 
-  a configuration for the component that it represents.
-*/
-
 import React from "react";
-import { Box, Button, Card, Divider, Grid, IconButton, Typography } from "@mui/joy";
+import { Box, Card, Divider, Typography } from "@mui/joy";
 import { Icon } from "@iconify/react";
-//Draggable
-import {useDraggable} from '@dnd-kit/core';
-import {CSS} from '@dnd-kit/utilities';
-import { atom } from 'jotai';
+// Draggable
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
+import { CardContent } from "@mui/material";
 
-//INTERFACES
+// INTERFACES
 
+interface ComponentProps {
+  name: string;
+  icon: string;
+}
 
-//TYPES
-type Component = {
-  
-};
+interface DraggableToolbarItemProps {
+  component: ComponentProps;
+}
 
-const DraggableToolbarItem = ({ component }) => {
+const DraggableToolbarItem: React.FC<DraggableToolbarItemProps> = ({
+  component,
+}) => {
+  // PROPS
+  const { name, icon } = component;
 
-  //PROPS
-  const { 
-    name,
-    icon,
-    
-  } = component;
-
-  //Draggable
-  const {attributes, listeners, setNodeRef, transform} = useDraggable({
-    id: 'unique-id',
+  // Draggable
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: name, // Use a unique ID for each component
   });
+
   const style = {
     transform: CSS.Translate.toString(transform),
   };
-  
+
   return (
     <Card
       ref={setNodeRef}
@@ -49,27 +44,18 @@ const DraggableToolbarItem = ({ component }) => {
         width: "100%",
         textAlign: "center",
         cursor: "pointer",
-        '&:hover': {
+        "&:hover": {
           backgroundColor: "primary.light",
-        }
+        },
       }}
     >
-      <Grid container direction="column" alignItems="center">
-        <Grid
-          sx={{
-            p: 1,
-            m: 1,
-            width: "100%",
-            textAlign: "center",
-          }}
-        >
-          <Icon icon={component.icon} width={35} height={35} />
-        </Grid>
-        <Grid>
-          <Divider />
-          <Typography level="body-sm">{name}</Typography>
-        </Grid>
-      </Grid>
+      <CardContent sx={{ p: 1 }}>
+        <Icon icon={icon} width="30" height="30" />
+        <Divider sx={{ my: 1 }} />
+        <Typography level="title-md">{name}</Typography>
+      </CardContent>
     </Card>
   );
 };
+
+export default DraggableToolbarItem;

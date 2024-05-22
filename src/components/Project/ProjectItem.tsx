@@ -13,8 +13,19 @@ import {
 } from "@mui/joy";
 import { ProjectItem } from "@/types/projects";
 import { Icon } from "@iconify/react";
+import { useRouter } from "next/navigation";
 
 const ProjectGridItem: React.FC<{ project: ProjectItem }> = ({ project }) => {
+
+  //CONSTANTS
+  const router = useRouter();
+
+  //FUNCTIONS
+  const handleOpenProject = () => {
+    console.log("Opening project", project.id);
+    router.push(`/dashboard/project/${project.id}`);
+  }
+  
   return (
     <Card variant="outlined" size="sm">
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -51,7 +62,9 @@ const ProjectGridItem: React.FC<{ project: ProjectItem }> = ({ project }) => {
                 "--ListItem-radius": "var(--joy-radius-sm)",
               }}
             >
-              <MenuItem>
+              <MenuItem
+                onClick={handleOpenProject}
+              >
                 <Icon icon="heroicons:document-text" />
                 Open Project
               </MenuItem>
