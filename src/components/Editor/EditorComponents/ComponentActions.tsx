@@ -2,7 +2,7 @@
 
 import React, { useContext, useCallback, useState } from "react";
 import { Icon } from "@iconify/react";
-import { useEditor } from "@craftjs/core";
+import { useEditor, useNode } from "@craftjs/core";
 import {
   Box,
   ButtonGroup,
@@ -12,6 +12,7 @@ import {
   Button,
 } from "@mui/joy";
 import { EditorContext } from "../Context/EditorContext";
+import { useBaseComponent } from "../BaseComponent";
 
 interface ComponentActionsProps {
   onSelectParent?: () => void;
@@ -23,8 +24,8 @@ export const ComponentActions: React.FC<ComponentActionsProps> = ({
   onSelectParent,
   customActions,
 }) => {
-  const { sidebarOpen, currentTab, handleCurrentTab } =
-    useContext(EditorContext);
+  const { currentTab, handleCurrentTab } = useContext(EditorContext);
+  const { isSelected } = useBaseComponent();
 
   const { actions, query, selected, canUndo, canRedo } = useEditor(
     (state, query) => {
@@ -44,8 +45,8 @@ export const ComponentActions: React.FC<ComponentActionsProps> = ({
 
       return {
         selected,
-        canUndo: state.options.enabled && query.history.canRedo(),
-        canRedo: state.options.enabled && query.history.canUndo(),
+        canUndo: state.options.enabled && query.history.canUndo(),
+        canRedo: state.options.enabled && query.history.canRedo(),
       };
     }
   );
@@ -77,11 +78,11 @@ export const ComponentActions: React.FC<ComponentActionsProps> = ({
 
   const handleCopy = useCallback(() => {
     if (selected?.id) {
-      //first we need to select the node
+      // First we need to select the node
       actions.selectNode(selected.id);
-      //then We query the node to get the node data
+      // Then we query the node to get the node data
       const node = query.node(selected.id);
-      //then we copy the node to the clipboard
+      // Then we copy the node to the clipboard
       window.navigator.clipboard.writeText(
         JSON.stringify(node.toSerializedNode())
       );
@@ -89,14 +90,18 @@ export const ComponentActions: React.FC<ComponentActionsProps> = ({
   }, [actions, selected]);
 
   const handlePaste = useCallback(() => {
-    //first we need to get the data from the clipboard
+    // First we need to get the data from the clipboard
     window.navigator.clipboard.readText().then((data) => {
-      //then we parse the data to a JSON object
+      // Then we parse the data to a JSON object
       const parsedData = JSON.parse(data);
-      //then we add the node to the editor
+      // Then we add the node to the editor
       actions.add(parsedData);
     });
   }, [actions]);
+
+  if (!isSelected) {
+    return null;
+  }
 
   return (
     <Box>

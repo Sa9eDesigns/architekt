@@ -4,12 +4,20 @@
 These are the developer docs for the ARCHITEKT.
 ARCHITEKT is a No Code development platform that allows you to build web applications without writing a single line of code. It does this by providing a drag and drop interface to build, design and manage your web applications.
 
-## Overview
-The ARCHITEKT platform is a web-based platform that allows you to build Next.js applications using by using Drag-Drop interface (for building UI), and a visual workflow builder (for building logic), and a database builder (for managing data). The platform is designed to be easy to use and requires no coding knowledge to build web applications.
+## Technologies
+Next.js, React, Typescript, MUI, React-Grid-Layout, React Aria, Dnd-Kit, Supabase, Vercel ...
 
-## From Idea to Application
-The ARCHITEKT platform is designed to take an idea and turn it into a fully functional web application. The platform provides all the tools that you need to build a web application from scratch.Here is a high-level overview of the process of building a web application using the ARCHITEKT platform:
-1. **Create a New Project**: The use is presented is presented with a Step-by-Step wizard to create a new project. The user can define the name of the project, the type of project, and the template to use.
-**Note**: The Template is Stored as a Zip file and is a working Next.js project with the necessary files and folders.
+
+## Overview
+The ARCHITEKT Provides visual tools to build web applications then generates the code under the hood. The generated code is a Next.js application that can be deployed to any hosting Platform. 
+
+## Concepts
+### Components 
+Components are the building blocks of an ARCHITEKT application. They are the visual elements that make up the user interface of your application. The next section decribes the Editor in detail.
+
+### Component Composer
+The Component Composer uses the [React-Grid-Layout](https://github.com/react-grid-layout/react-grid-layout) library to along with [React Aria](https://react-spectrum.adobe.com/react-aria/index.html) primitives that are Wrapped in [@dnd-kit](https://dnd-kit.com) to provide a drag and drop interface for building web applications. 
+
+
 
 

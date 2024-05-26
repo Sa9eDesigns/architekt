@@ -15,31 +15,25 @@ import { Box, Container, Skeleton } from "@mui/joy";
 import { useAction } from "next-safe-action/hooks";
 import { getProjects } from "@/actions/Project";
 import demoProjects from "@/demo/projects/projects";
+import { useRouter } from "next/navigation";
 
-export default function Components() {
+export default function CustomComponents() {
   //CONSTANTS
+  const router = useRouter();
 
   //STATES
 
   //FUNCTIONS
+  const openEditor = () => {
+    console.log("open editor");
+    router.push("/dashboard/editor/")
+  }
 
   //HOOKS
 
   //RENDER
   return (
-    <Sheet
-      sx={{
-        //display: 'flex',
-        //flexFlow: 'row nowrap',
-        //justifyContent: 'center',
-        //alignItems: 'center',
-        minHeight: "100vh",
-        flexDirection: "column",
-      }}
-    >
-      <Header />
-
-      {/* Header and Button */}
+    <>
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -57,13 +51,13 @@ export default function Components() {
             color="neutral"
             size="md"
             sx={{ minWidth: "100px" }}
+            onClick={openEditor}
           >
             New Component
           </Button>
         </Stack>
       </Stack>
-
-    </Sheet>
+    </>
   );
 }
 

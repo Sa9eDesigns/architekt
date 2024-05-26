@@ -2,11 +2,6 @@
 
 import React, { useState } from "react";
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-} from "src/dashboard/modules/pages/designer/components/EditorAccordion";
-import {
   Box,
   Button,
   Card,
@@ -19,12 +14,15 @@ import {
   Stack,
   ToggleButtonGroup,
   Typography,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
 } from "@mui/joy";
 import { Icon } from "@iconify/react";
 import * as _ from "lodash";
 //Craftjs
 import "react-color-palette/css";
-import { FilePickerOpener } from "src/dashboard/components/FilePicker";
+import { FilePickerOpener } from "@/components/Editor/EditorProperties/FilePicker";
 import ColorPicker, {useColorPicker} from "react-best-gradient-color-picker";
 
 /*Editor Settings*/

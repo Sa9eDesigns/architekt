@@ -26,8 +26,12 @@ import {
   DialogContent,
   ModalDialog,
   Modal,
+  Stack,
 } from "@mui/joy";
 import { useRouter } from "next/navigation";
+import { useHover } from "ahooks";
+import Link from "next/link";
+import { Url } from "next/dist/shared/lib/router/router";
 
 //COMPONENTS
 //--Nested List Toggler
@@ -78,26 +82,54 @@ interface MenuItemProps {
   expanded?: boolean;
 }
 
-function MenuItem({ item, expanded = false }: MenuItemProps) {
+function MenuItem({ item, expanded}: MenuItemProps) {
+
+  const router = useRouter();
+
+  const handleNav = (link: string) => {
+    router.push(link);
+  };
+
   return (
-    <ListItem>
-      <ListItemButton
-        onClick={() => {
-          /* navigate(item.link) */
-        }}
-      >
-        {expanded ? (
-          <>
-            <Icon icon={item.icon ? item.icon : "eva:file-text-outline"} />
+    <>
+      {expanded ? (
+        <ListItem>
+          <ListItemButton
+            onClick={() => {
+              handleNav(item.link);
+            }}
+          >
+            <Icon
+              icon={item.icon ? item.icon : "eva:file-text-outline"}
+              width={27}
+              height={27}
+            />
             <ListItemContent>
               <Typography level="title-sm">{item.title}</Typography>
             </ListItemContent>
-          </>
-        ) : (
-          <Icon icon={item.icon ? item.icon : "eva:file-text-outline"} />
-        )}
-      </ListItemButton>
-    </ListItem>
+          </ListItemButton>
+        </ListItem>
+      ) : (
+        <IconButton
+         sx={{
+            color: "var(--joy-palette-text-primary)",
+            "&:hover": {
+              backgroundColor: "var(--joy-palette-background-secondary)",
+              color: "var(--joy-palette-text-primary)",
+            },
+         }}
+          onClick={() => {
+            handleNav(item.link);
+          }}
+        >
+          <Icon
+            icon={item.icon ? item.icon : "eva:file-text-outline"}
+            width={25}
+            height={25}
+          />
+        </IconButton>
+      )}
+    </>
   );
 }
 
@@ -106,142 +138,87 @@ interface NestedMenuItemProps {
   item: {
     title: string | React.ReactNode | null;
     icon?: string | IconifyIcon;
-    link?: string;
+    link?: string | Url;
     nested?: { title: string; link: string }[];
   };
   expanded?: boolean;
 }
 
-function NestedMenuItem({ item, expanded = false }: NestedMenuItemProps) {
+function NestedMenuItem({ item, expanded }: NestedMenuItemProps) {
+
+  //CONSTANTS
+  const router = useRouter();
+
+  const handleNav = (link: string) => {
+    router.push(link)
+  }
+
+  
   return (
-    <ListItem nested>
-      <Toggler
-        renderToggle={({ open, setOpen }) => (
-          <ListItemButton onClick={() => setOpen(!open)}>
-            <Icon icon={item.icon ? item.icon : "eva:file-text-outline"} />
-            <ListItemContent>
-              <Typography level="title-sm">{item.title}</Typography>
-            </ListItemContent>
-            <Icon
-              icon="eva:arrow-ios-downward-outline"
-              width="24"
-              height="24"
-            />
-          </ListItemButton>
-        )}
-      >
-        <List sx={{ gap: 0.5 }}>
-          {item.nested?.map((nestedItem) => (
-            <ListItem
-              sx={{ mt: 0.5 }}
-              key={nestedItem.title}
-              onClick={() => {
-                /* navigate(nestedItem.link) */
-              }}
-            >
-              <ListItemButton>{nestedItem.title}</ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Toggler>
-    </ListItem>
+    <>
+      {expanded ? (
+        <ListItem nested>
+          <Toggler
+            renderToggle={({ open, setOpen }) => (
+              <ListItemButton onClick={() => setOpen(!open)}>
+                <Icon
+                  icon={item.icon ? item.icon : "eva:file-text-outline"}
+                  width={27}
+                  height={27}
+                />
+                <ListItemContent>
+                  <Typography level="title-sm">{item.title}</Typography>
+                </ListItemContent>
+                <Icon
+                  icon="eva:arrow-ios-downward-outline"
+                  width="24"
+                  height="24"
+                />
+              </ListItemButton>
+            )}
+          >
+            
+            <List sx={{ gap: 0.5 }}>
+              {item.nested?.map((nestedItem) => (
+                <ListItem
+                  sx={{ mt: 0.5 }}
+                  key={nestedItem.title}
+                  onClick={() => {
+                    /* navigate(nestedItem.link) */
+                    handleNav(nestedItem.link)
+                  }}
+                >
+                  <ListItemButton>{nestedItem.title}</ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+            
+          </Toggler>
+        </ListItem>
+      ) : (
+        <IconButton
+          onClick={() => {
+            /* navigate(item.link) */
+          }}
+        >
+          <Icon
+            icon={item.icon ? item.icon : "eva:file-text-outline"}
+            width={25}
+            height={25}
+          />
+        </IconButton>
+      )}
+    </>
   );
 }
 
-export default function ProjectNav({ project }) {
+export default function ProjectNav() {
   //CONSTANTS
   const router = useRouter();
-  const NavigationItems = [
-    {
-      title: "Components",
-      icon: "fluent:border-none-20-regular",
-      link: `/dashboard/projects/${project.id}/components`,
-    },
-    {
-      title: "Pages",
-      icon: "eva:file-text-outline",
-      link: `/dashboard/projects/${project.id}/pages`,
-    },
-    {
-      title: "Database",
-      icon: "fluent:database-20-regular",
-      link: `/dashboard/projects/${project.id}/database`,
-    },
-    {
-      title: "App Variables",
-      icon: "fluent:braces-variable-48-filled",
-      link: `/dashboard/projects/${project.id}/variables`,
-    },
-    {
-      title: "External APIs",
-      icon: "fluent:plug-connected-settings-20-regular",
-      link: `/dashboard/projects/${project.id}/apis`,
-    },
-    {
-      title: "Media",
-      icon: "fluent:image-20-regular",
-      link: `/dashboard/projects/${project.id}/media`,
-    },
-    {
-      title: "Custom Code",
-      icon: "fluent:code-20-regular",
-      link: `/dashboard/projects/${project.id}/code`,
-    },
-    {
-      title: "Theming",
-      icon: "fluent:color-24-regular",
-      link: `/dashboard/projects/${project.id}/theme`,
-      nested: [
-        {
-          title: "Colors",
-          link: `/dashboard/projects/${project.id}/theme/colors`,
-        },
-        {
-          title: "Typography",
-          link: `/dashboard/projects/${project.id}/theme/typography`,
-        },
-        {
-          title: "Spacing",
-          link: `/dashboard/projects/${project.id}/theme/spacing`,
-        },
-        {
-          title: "Breakpoints",
-          link: `/dashboard/projects/${project.id}/theme/breakpoints`,
-        },
-        {
-          title: "Primitive Elements",
-          link: `/dashboard/projects/${project.id}/theme/primitives`,
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      icon: "fluent:settings-20-regular",
-      link: `/dashboard/projects/${project.id}/settings`,
-      nested: [
-        {
-          title: "General",
-          link: `/dashboard/projects/${project.id}/settings/general`,
-        },
-        {
-          title: "Members",
-          link: `/dashboard/projects/${project.id}/settings/members`,
-        },
-        {
-          title: "Billing",
-          link: `/dashboard/projects/${project.id}/settings/billing`,
-        },
-        {
-          title: "Integrations",
-          link: `/dashboard/projects/${project.id}/settings/integrations`,
-        },
-      ],
-    },
-  ];
-  const expandedNavWidth = 240;
+  const expandedNavWidth = 220;
   const collapsedNavWidth = 56;
-
-  //CONTEXT
+  const menuRef = React.useRef(null);
+  const isHovering = useHover(menuRef);
 
   //STATES
   //--app states
@@ -250,6 +227,7 @@ export default function ProjectNav({ project }) {
   const [isExpanded, setIsExpanded] = React.useState(false);
   //--dialog states
   const [openLogoutDialog, setOpenLogoutDialog] = React.useState(false);
+  const [projectID, setProjectID] = React.useState("");
 
   //FUNCTIONS
   //--get the Current User from local storage
@@ -261,6 +239,95 @@ export default function ProjectNav({ project }) {
     //set the current user to the parsed object
     setCurrentUser(user);
   }
+  
+
+  const NavigationItems = [
+    {
+      title: "Components",
+      icon: "fluent:border-none-20-regular",
+      link: `/dashboard/project/${projectID}/custom-components`,
+    },
+    {
+      title: "Pages",
+      icon: "eva:file-text-outline",
+      link: `/dashboard/project/${projectID}/pages`,
+    },
+    {
+      title: "Database",
+      icon: "fluent:database-20-regular",
+      link: `/dashboard/project/${projectID}/database`,
+    },
+    {
+      title: "App Variables",
+      icon: "fluent:braces-variable-48-filled",
+      link: `/dashboard/project/${projectID}/variables`,
+    },
+    {
+      title: "External APIs",
+      icon: "fluent:plug-connected-settings-20-regular",
+      link: `/dashboard/project/${projectID}/apis`,
+    },
+    {
+      title: "Media",
+      icon: "fluent:image-20-regular",
+      link: `/dashboard/project/${projectID}/media`,
+    },
+    {
+      title: "Custom Code",
+      icon: "fluent:code-20-regular",
+      link: `/dashboard/project/${projectID}/code`,
+    },
+    {
+      title: "Theming",
+      icon: "fluent:color-24-regular",
+      link: `/dashboard/project/${projectID}/theme`,
+      nested: [
+        {
+          title: "Colors",
+          link: `/dashboard/project/${projectID}/theme/colors`,
+        },
+        {
+          title: "Typography",
+          link: `/dashboard/project/${projectID}/theme/typography`,
+        },
+        {
+          title: "Spacing",
+          link: `/dashboard/project/${projectID}/theme/spacing`,
+        },
+        {
+          title: "Breakpoints",
+          link: `/dashboard/project/${projectID}/theme/breakpoints`,
+        },
+        {
+          title: "Primitive Elements",
+          link: `/dashboard/project/${projectID}/theme/primitives`,
+        },
+      ],
+    },
+    {
+      title: "Settings",
+      icon: "fluent:settings-20-regular",
+      link: `/dashboard/project/${projectID}/settings`,
+      nested: [
+        {
+          title: "General",
+          link: `/dashboard/project/${projectID}/settings/general`,
+        },
+        {
+          title: "Members",
+          link: `/dashboard/project/${projectID}/settings/members`,
+        },
+        {
+          title: "Billing",
+          link: `/dashboard/project/${projectID}/settings/billing`,
+        },
+        {
+          title: "Integrations",
+          link: `/dashboard/project/${projectID}/settings/integrations`,
+        },
+      ],
+    },
+  ];
 
   //--Log out the current user
   function logOutCurrentUser() {
@@ -271,9 +338,29 @@ export default function ProjectNav({ project }) {
     router.replace("/");
   }
 
+  function getProjectIDFromURL() {
+    //get the project id from the url
+    const url = window.location.pathname;
+    const id = url.split("/")[3];
+    //set the project id to the extracted id
+    setProjectID(id);
+  }
+
+  //EFFECTS
+  //--When Hovering over the Sidebar, expand it
+  React.useEffect(() => {
+    setIsExpanded(isHovering);
+  }, [isHovering]);
+
+  React.useEffect(() => {
+    //getCurrentUser();
+    getProjectIDFromURL();
+  }, []);
+
   //RENDER
   return (
     <Sheet
+      ref={menuRef}
       className="Sidebar"
       sx={{
         position: { xs: "fixed", md: "sticky" },
@@ -289,7 +376,7 @@ export default function ProjectNav({ project }) {
           md: isExpanded ? `${expandedNavWidth}px` : `${collapsedNavWidth}px`,
         },
         top: 0,
-        p: 2,
+        p: 0.5,
         flexShrink: 0,
         display: "flex",
         flexDirection: "column",
@@ -327,40 +414,51 @@ export default function ProjectNav({ project }) {
         }}
         //onClick={}
       />
-      <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+      <Box sx={{ display: "flex", gap: 1, alignItems: isExpanded ? "center" : "flex-start" }}>
         {isExpanded ? (
-          <>
-            <Box
-              sx={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "50%",
-                overflow: "hidden",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "var(--joy-palette-background-secondary)",
-              }}
-            >
-              <img
-                src="/images/logo-md.png"
-                alt="Architekt"
-                style={{ width: "32px", height: "32px" }}
-              />
-            </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Stack direction="row" gap={1}>
+              <Box
+                sx={{
+                  width: "45px",
+                  height: "45px",
+                  borderRadius: "50%",
+                  overflow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "var(--joy-palette-background-secondary)",
+                }}
+              >
+                <img
+                  src="/images/logo-md.png"
+                  alt="Architekt"
+                  style={{ width: "40px", height: "40px" }}
+                />
+              </Box>
 
-            <Typography
-              level="title-lg"
-              sx={{
-                fontFamily: "var(--font-inno)",
-                color: "var(--joy-palette-text-primary)",
-                fontSize: "x-large",
-              }}
-            >
-              ARCHITEKT
-            </Typography>
+              <Typography
+                level="title-lg"
+                sx={{
+                  fontFamily: "var(--font-inno)",
+                  color: "var(--joy-palette-text-primary)",
+                  fontSize: "x-large",
+                  padding: "0.5rem",
+                }}
+              >
+                ARCHITEKT
+              </Typography>
+            </Stack>
 
-            <Input
+            {/* <Input
               size="sm"
               startDecorator={
                 <Icon
@@ -371,13 +469,13 @@ export default function ProjectNav({ project }) {
                 />
               }
               placeholder="Search"
-            />
-          </>
+            /> */}
+          </Box>
         ) : (
           <Box
             sx={{
-              width: "32px",
-              height: "32px",
+              width: "45px",
+              height: "45px",
               borderRadius: "50%",
               overflow: "hidden",
               display: "flex",
@@ -389,7 +487,7 @@ export default function ProjectNav({ project }) {
             <img
               src="/images/logo-md.png"
               alt="Architekt"
-              style={{ width: "32px", height: "32px" }}
+              style={{ width: "40px", height: "40px" }}
             />
           </Box>
         )}
@@ -405,55 +503,25 @@ export default function ProjectNav({ project }) {
           [`& .${listItemButtonClasses.root}`]: {
             gap: 1.5,
           },
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
         }}
       >
         <List
           size="sm"
           sx={{
             gap: 1,
-            "--List-nestedInsetStart": "30px",
+            "--List-nestedInsetStart": "40px",
             "--ListItem-radius": (theme) => theme.vars.radius.sm,
           }}
         >
           {NavigationItems.map((item) => {
-            if (!item.nested) {
+            if (item.nested) {
               return (
-                <NestedMenuItem key={item.title} item={item} expanded={open} />
+                <NestedMenuItem key={item.title} item={item} expanded={isExpanded} />
               );
             }
-            return (
-              <ListItem nested>
-                <Toggler
-                  renderToggle={({ open, setOpen }) => (
-                    <ListItemButton onClick={() => setOpen(!open)}>
-                      <Icon icon={item.icon} width="24" height="24" />
-                      <ListItemContent>
-                        <Typography level="title-sm">{item.title}</Typography>
-                      </ListItemContent>
-                      <Icon
-                        icon="eva:arrow-ios-downward-outline"
-                        width="24"
-                        height="24"
-                      />
-                    </ListItemButton>
-                  )}
-                >
-                  <List sx={{ gap: 0.5 }}>
-                    {item.nested?.map((nestedItem) => (
-                      <ListItem
-                        sx={{ mt: 0.5 }}
-                        key={nestedItem.title}
-                        onClick={() => {
-                          /* navigate(nestedItem.link) */
-                        }}
-                      >
-                        <ListItemButton>{nestedItem.title}</ListItemButton>
-                      </ListItem>
-                    ))}
-                  </List>
-                </Toggler>
-              </ListItem>
-            );
+            return <MenuItem key={item.title} item={item} expanded={isExpanded} />;
           })}
         </List>
       </Box>

@@ -1,17 +1,13 @@
 import { ProjectItem } from "@/types/projects";
+import { Typography } from "@mui/joy";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 
-interface PageProps {
-  project: ProjectItem;
 
-}
-
-export default function Page({ project }: PageProps) {
+export default function Page() {
   return(
     <div>
-      <h1>{project.name}</h1>
-      <p>{project.description}</p>
+      <Typography level="title-lg">I Am Projects</Typography>
     </div>
   )
 }

@@ -1,3 +1,5 @@
+"use client";
+
 // src/state/atoms.ts
 import { atom } from "jotai";
 import { createClient } from "@/supabase/client";

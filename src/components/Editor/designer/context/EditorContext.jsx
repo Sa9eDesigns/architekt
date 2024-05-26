@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useContext, useState } from "react";
 
 /*CONTEXT*/
@@ -33,17 +35,15 @@ export const EditorProvider = ({ children }) => {
   //RENDER
   return (
     <EditorContext.Provider
-      value={
-        {
-          //CONSTANTS
-          //STATES
-          sidebarOpen,
-          currentTab,
-          //FUNCTIONS
-          handleSidebarVisibility,
-          handleCurrentTab,
-        }
-      }
+      value={{
+        //CONSTANTS
+        //STATES
+        sidebarOpen,
+        currentTab,
+        //FUNCTIONS
+        handleSidebarVisibility,
+        handleCurrentTab,
+      }}
     >
       {children}
     </EditorContext.Provider>

@@ -1,3 +1,5 @@
+"use client";
+
 // src/components/Toolbar/Toolbar.tsx
 import React, { useContext, useState } from "react";
 import { Icon } from "@iconify/react";

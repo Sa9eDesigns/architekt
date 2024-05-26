@@ -18,7 +18,7 @@ import { useGlobalStore } from "@/stores/globalStoreProvider";
 
 export default function ProjectLayout({
   children,
-  params
+  params,
 }: {
   children: React.ReactNode;
   params: Params;
@@ -31,12 +31,10 @@ export default function ProjectLayout({
   //STATES
 
   //CONTEXT
-  
+
   //FUNCTIONS
-  const { getProjectById } = useProject();
-  
+
   //EFFECTS
-  
 
   //HOOKS
 
@@ -45,7 +43,7 @@ export default function ProjectLayout({
     <Sheet>
       <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
         {/*Project Navigation*/}
-        <ProjectNav project={project} />
+        <ProjectNav />
 
         {/*Main Content*/}
         <Box

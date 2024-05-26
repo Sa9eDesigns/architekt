@@ -1,3 +1,5 @@
+'use client';
+
 /*This page Defines the Layout Editor Page
  - 3 Column Layout
  - Left Sidebar : Contains the Components
@@ -8,7 +10,7 @@
 import React from "react";
 import { Box, Grid } from "@mui/joy";
 import LeftSidebar from "@/components/Modules/Editors/AchiTypeEditor/Components/LeftSidebar";
-import LayoutEditor from "@/components/Modules/Editors/AchiTypeEditor/LayoutEditor";
+import LayoutEditor from "@/components/Editor";
 
 export default function LayoutEditorPage() {
   
@@ -22,18 +24,9 @@ export default function LayoutEditorPage() {
 
   //RENDER
   return (
-    <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
-      <Grid container>
-        <Grid xs={3}>
-          <LeftSidebar />
-        </Grid>
-        <Grid xs={6}>
-          <LayoutEditor />
-        </Grid>
-        <Grid xs={3}>
-        </Grid>
-      </Grid>
+    <Box sx={{ height: "100vh", overflow: "hidden", width: "100%" }}>
+      <LayoutEditor />
     </Box>
-  )
+  );
 }
 

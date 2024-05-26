@@ -1,16 +1,109 @@
-import React, { useState, useCallback, useMemo } from "react";
+'use client';
+
+import React, {useCallback, useMemo, useState} from "react";
+import { BaseComponent } from "../BaseComponent";
+import { Element, useNode } from "@craftjs/core";
+//import { SectionSettings } from "./SectionSettings";
+import LayoutSettings from "@/components/Editor/EditorProperties/LayoutSettings"
+import TypographySettings from "@/components/Editor/EditorProperties/TypographySettings";
+import BackgroundSettings from "@/components/Editor/EditorProperties/BackgroundSettings";
+import { Action } from "@/types/types";
+import { Button, ToggleButtonGroup } from "@mui/joy";
 import { Icon } from "@iconify/react";
-import { useNode } from "@craftjs/core";
-import {
-  ToggleButtonGroup,
-  Button,
-  Box,
-  Typography,
-  Modal,
-} from "@mui/joy";
-import LayoutSettings from "./fieldSettings/LayoutSettings";
-import TypographySettings from "./fieldSettings/TypographySettings";
-import BackgroundSettings from "./fieldSettings/BackgroundSettings";
+
+
+export type T_SectionProps = {
+  background?: Record<"r" | "g" | "b" | "a", number>;
+  color?: Record<"r" | "g" | "b" | "a", number>;
+  flexDirection?: string;
+  alignItems?: string;
+  justifyContent?: string;
+  fillSpace?: string;
+  width?: string;
+  height?: string;
+  padding?: string[];
+  margin?: string[];
+  shadow?: number;
+  radius?: number;
+  children?: React.ReactNode;
+};
+
+export type T_SectionSettings = {
+  actions: Action;
+  settings : React.ReactNode;
+  id : string;
+  classes : string;
+  layout : any;
+  size: any;
+  spacing: any;
+  position: any;
+  borders: any;
+  background: any;
+  effects: any;
+  typography: any;
+  onSettingsChange: any;
+};
+
+
+const defaultProps = {
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  fillSpace: "no",
+  padding: ["20", "20", "20", "20"],
+  margin: ["10", "10", "10", "10"],
+  background: { r: 249, g: 249, b: 249, a: 1 },
+  color: { r: 0, g: 0, b: 0, a: 1 },
+  shadow: 1,
+  radius: 5,
+  width: "100%",
+  height: "auto",
+};
+
+export const Section = (props: T_SectionProps) => {
+  props = {
+    ...defaultProps,
+    ...props,
+  };
+  const {
+    flexDirection,
+    alignItems,
+    justifyContent,
+    fillSpace,
+    background,
+    color,
+    padding,
+    margin,
+    shadow,
+    radius,
+    children,
+  } = props;
+  return (
+    <BaseComponent custom={{ displayName: "Section" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent,
+          flexDirection: flexDirection as any,
+          alignItems,
+          background: `rgba(${Object.values(background)})`,
+          color: `rgba(${Object.values(color)})`,
+          padding: `${padding[0]}px ${padding[1]}px ${padding[2]}px ${padding[3]}px`,
+          margin: `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`,
+          boxShadow:
+            shadow === 0
+              ? "none"
+              : `0px 3px 100px ${shadow}px rgba(0, 0, 0, 0.13)`,
+          borderRadius: `${radius}px`,
+          flex: fillSpace === "yes" ? 1 : "unset",
+        }}
+      >
+        {children}
+      </div>
+    </BaseComponent>
+  );
+};
+
 
 /* EDITOR SETTINGS */
 export const ComponentSettings: React.FC = () => {
@@ -135,3 +228,17 @@ export const ComponentSettings: React.FC = () => {
     </>
   );
 };
+
+
+Section.craft = {
+  displayName: "Section",
+  props: defaultProps,
+  rules: {
+    canDrag: () => true,
+  },
+  related: {
+    settings: ComponentSettings
+  },
+};
+
+export default Section;

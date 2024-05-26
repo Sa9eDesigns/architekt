@@ -8,7 +8,7 @@ import {
 import { JotaiProvider } from '@/components/Stores';
 import local from 'next/font/local';
 import { AIStoreProvider } from '@/stores/useAIStoreProvider';
-import { EditorProvider } from '@/components/Editor/Context/EditorContext';
+import { CCEditorProvider } from '../components/Modules/Editors/AchiTypeEditor/Context/CCContext';
 
 //Metadata
 export const metadata = {
@@ -53,7 +53,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         <ThemeRegistry>
           <GlobalStoreProvider>
             <AIStoreProvider>
-              <EditorProvider>{props.children}</EditorProvider>
+              <CCEditorProvider>{props.children}</CCEditorProvider>
             </AIStoreProvider>
           </GlobalStoreProvider>
         </ThemeRegistry>

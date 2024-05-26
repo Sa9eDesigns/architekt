@@ -16,7 +16,7 @@ import { useAction } from "next-safe-action/hooks";
 import { getProjects } from "@/actions/Project";
 import demoProjects from "@/demo/projects/projects";
 
-export default function Components() {
+export default function Pages() {
   //CONSTANTS
 
   //STATES
